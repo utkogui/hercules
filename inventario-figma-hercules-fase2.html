@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hércules Fase 2 — Inventário e avaliação de comentários</title>
+<style>
+  :root {
+    --bg: #f4f6f8;
+    --card: #fff;
+    --ink: #1a2332;
+    --muted: #5c6b7a;
+    --line: #d8e0e8;
+    --bruno: #1f4b99;
+    --nathalia: #0f6b5c;
+    --accent: #c45c26;
+    --ok: #1f7a4d;
+    --warn: #a15c00;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Source Sans 3", "Segoe UI", sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(1200px 600px at 10% -10%, #e8eef7 0%, transparent 55%),
+      radial-gradient(900px 500px at 100% 0%, #f3ebe3 0%, transparent 50%),
+      var(--bg);
+    line-height: 1.45;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 32px 20px 80px; }
+  header.hero {
+    background: linear-gradient(135deg, #13233a 0%, #1f3d5c 55%, #2a4d4a 100%);
+    color: #f5f7fa;
+    border-radius: 16px;
+    padding: 28px 28px 24px;
+    margin-bottom: 28px;
+    box-shadow: 0 12px 40px rgba(19,35,58,.22);
+  }
+  header.hero h1 { margin: 0 0 8px; font-size: 1.55rem; font-weight: 700; letter-spacing: -.02em; }
+  header.hero p { margin: 0; opacity: .88; max-width: 62ch; }
+  .toolbar {
+    display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 0;
+  }
+  .toolbar button, .toolbar a.btn {
+    appearance: none; border: 0; border-radius: 999px; padding: 10px 16px;
+    font: inherit; font-weight: 600; cursor: pointer; text-decoration: none; color: #13233a; background: #fff;
+  }
+  .toolbar button.secondary { background: rgba(255,255,255,.14); color: #fff; border: 1px solid rgba(255,255,255,.25); }
+  .stats {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 22px 0 28px;
+  }
+  .stat {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px;
+  }
+  .stat strong { display: block; font-size: 1.4rem; }
+  .stat span { color: var(--muted); font-size: .9rem; }
+  nav.toc {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin-bottom: 28px;
+  }
+  nav.toc h2 { margin: 0 0 10px; font-size: 1rem; }
+  nav.toc ol { margin: 0; padding-left: 1.2rem; columns: 2; gap: 24px; }
+  nav.toc a { color: var(--bruno); text-decoration: none; }
+  nav.toc a:hover { text-decoration: underline; }
+  .page {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 22px 22px 10px; margin-bottom: 22px;
+  }
+  .page > h3 { margin: 0 0 14px; font-size: 1.2rem; }
+  .section-block { margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px dashed var(--line); }
+  .section-block h4 { margin: 0 0 6px; font-size: .98rem; }
+  .frames { margin: 6px 0 0; padding-left: 1.1rem; color: #314255; }
+  .frames li { margin: 2px 0; }
+  .note { margin: 6px 0; font-size: .9rem; color: var(--warn); background: #fff7e8; border-left: 3px solid #e0a24a; padding: 8px 10px; }
+  .comments-heading { margin: 18px 0 10px; font-size: 1rem; }
+  .muted { color: var(--muted); font-size: .92rem; }
+  .comment-card {
+    border: 1px solid var(--line); border-radius: 12px; padding: 14px 14px 12px; margin: 0 0 14px;
+    background: #fbfcfe;
+  }
+  .comment-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .badge {
+    display: inline-flex; align-items: center; border-radius: 999px; padding: 4px 10px;
+    font-size: .8rem; font-weight: 700; color: #fff;
+  }
+  .badge.bruno { background: var(--bruno); }
+  .badge.nathalia { background: var(--nathalia); }
+  .meta { color: var(--muted); font-size: .82rem; }
+  .comment-body { font-size: .98rem; margin-bottom: 8px; white-space: normal; }
+  .reply { font-size: .9rem; color: #3a4a5a; background: #eef3f8; border-radius: 8px; padding: 8px 10px; margin: 6px 0 10px; }
+  .assess {
+    margin-top: 10px; border-top: 1px solid var(--line); padding-top: 12px;
+  }
+  .assess-title { margin: 0 0 10px; font-weight: 700; font-size: .92rem; color: #243447; }
+  .q { margin-bottom: 12px; }
+  .q > label { display: block; font-weight: 600; margin-bottom: 6px; font-size: .92rem; }
+  .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line);
+    border-radius: 999px; padding: 6px 12px; background: #fff; cursor: pointer; font-size: .9rem;
+  }
+  .chip:has(input:checked) { border-color: var(--accent); background: #fff4ec; }
+  .row { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center; }
+  @media (max-width: 720px) {
+    .row { grid-template-columns: 1fr; }
+    nav.toc ol { columns: 1; }
+    .stats { grid-template-columns: 1fr; }
+  }
+  input.free, textarea {
+    width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px;
+    font: inherit; background: #fff;
+  }
+  input.free:disabled, textarea:disabled { background: #eef1f4; color: #8a97a5; }
+  .impact-fields[hidden] { display: none !important; }
+  footer.note-foot { margin-top: 28px; color: var(--muted); font-size: .88rem; }
+  @media print {
+    body { background: #fff; }
+    .toolbar { display: none; }
+    .page, .comment-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1>Hércules Interface — Fase 2</h1>
+    <p>Inventário de telas + avaliação dos comentários abertos de <strong>Bruno de Paula</strong> e <strong>Nathalia Bertoldo</strong>. Preencha cada caixa; as respostas ficam salvas neste navegador.</p>
+    <div class="toolbar">
+      <button type="button" id="btnExport">Exportar respostas (JSON)</button>
+      <button type="button" class="secondary" id="btnPrint">Imprimir / PDF</button>
+      <button type="button" class="secondary" id="btnClear">Limpar respostas salvas</button>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><strong>16</strong><span>Comentários abertos — Bruno</span></div>
+    <div class="stat"><strong>23</strong><span>Comentários abertos — Nathalia</span></div>
+    <div class="stat"><strong>39</strong><span>Total a avaliar</span></div>
+  </div>
+
+  <nav class="toc">
+    <h2>Páginas</h2>
+    <ol>
+      <li><a href="#page--&gt; Meu Painel">-&gt; Meu Painel</a></li><li><a href="#page-↳ Notificações">↳ Notificações</a></li><li><a href="#page-↳ Favoritos">↳ Favoritos</a></li><li><a href="#page-↳ Atividades">↳ Atividades</a></li><li><a href="#page--&gt; Projetos Lista">-&gt; Projetos Lista</a></li><li><a href="#page-↳ Interna do Projeto">↳ Interna do Projeto</a></li><li><a href="#page--&gt; Acompanhamento">-&gt; Acompanhamento</a></li><li><a href="#page-↳ Interna Auditoria">↳ Interna Auditoria</a></li><li><a href="#page--&gt; Biblioteca de Riscos">-&gt; Biblioteca de Riscos</a></li><li><a href="#page-↳ Interna do Risco">↳ Interna do Risco</a></li><li><a href="#page--&gt; Visão Geral">-&gt; Visão Geral</a></li>
+    </ol>
+  </nav>
+
+  
+<section class="page" id="page--&gt; Meu Painel">
+  <h3>-&gt; Meu Painel</h3>
+  <div class="hierarchy"><div class="section-block"><h4>Auditora / Gestor / Cliente</h4><ul class="frames"><li>Homepage / Blank</li><li>Homepage / Default</li></ul></div></div>
+  <h4 class="comments-heading">Comentários abertos (Bruno / Nathalia)</h4>
+  <p class="muted">Sem comentários abertos de Bruno/Nathalia nesta página.</p>
+</section>
+<section class="page" id="page-↳ Notificações">
+  <h3>↳ Notificações</h3>
+  <div class="hierarchy"><div class="section-block"><h4>Auditora / Gestor / Cliente</h4><ul class="frames"><li>Notificações / Filtro:On</li><li>Notificações / Dropdown Filtro</li><li>Notificações / Search: Results - Null</li><li>Notificações / Search: Results</li><li>Notificações / Search: Active - Typing</li><li>Notificações / Blank</li><li>Notificações / Default</li></ul></div></div>
+  <h4 class="comments-heading">Comentários abertos (Bruno / Nathalia)</h4>
+  <p class="muted">Sem comentários abertos de Bruno/Nathalia nesta página.</p>
+</section>
+<section class="page" id="page-↳ Favoritos">
+  <h3>↳ Favoritos</h3>
+  <div class="hierarchy"><div class="section-block"><h4>Auditora / Gestor / Cliente</h4><ul class="frames"><li>Favoritos / Blank</li><li>Favoritos / Alert: Error</li><li>Favoritos / Alert: Success</li><li>Favoritos / Tooltip</li><li>Favoritos / Default</li></ul></div></div>
+  <h4 class="comments-heading">Comentários abertos (Bruno / Nathalia)</h4>
+  <p class="muted">Sem comentários abertos de Bruno/Nathalia nesta página.</p>
+</section>
+<section class="page" id="page-↳ Atividades">
+  <h3>↳ Atividades</h3>
+  <div class="hierarchy"><div class="section-block"><h4>Auditora / Gestor / Cliente</h4><ul class="frames"><li>Atividades / Blank</li><li>Atividades / Default</li></ul></div></div>
+  <h4 class="comments-heading">Comentários abertos (Bruno / Nathalia)</h4>
+  <p class="muted">Sem comentários abertos de Bruno/Nathalia nesta página.</p>
+</section>
+<section class="page" id="page--&gt; Projetos Lista">
+  <h3>-&gt; Projetos Lista</h3>
+  <div class="hierarchy"><div class="section-block"><h4>Auditor/Gestor</h4><ul class="frames"><li>Projetos/Default/Feedback</li><li>Projetos/Default/Feedback</li><li>Projetos/Default/Feedback</li><li>Projetos/Default/Modal</li><li>Projetos/Default/Modal</li><li>Projetos/Default/Modal</li><li>Projetos/Default/Filtros</li><li>Projetos/Default/Filtros</li><li>Projetos/Default/Filtros</li><li>Projetos/Default</li><li>Projetos/Blank</li></ul></div></div>
+  <h4 class="comments-heading">Comentários abertos (Bruno / Nathalia)</h4>
+  <div class="comments">
+<article class="comment-card" data-id="1834974955" data-author="bruno">
+  <header class="comment-head">
+    <span class="badge bruno">Bruno de Paula</span>
+    <span class="meta">node <code>10:7368</code></span>
+  </header>
+  <div class="comment-body">Esse campo vai buscar apenas por risco ? não seria uma busca geral ou por projetos ?</div>
+  
+  <div class="assess" data-assess="1834974955">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1834974955" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1834974955" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1834974955" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1834974955" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1834974955" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1834974955" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1834974955" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1834974955" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1834974955" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1834977781" data-author="bruno">
+  <header class="comment-head">
+    <span class="badge bruno">Bruno de Paula</span>
+    <span class="meta">node <code>10:7368</code></span>
+  </header>
+  <div class="comment-body">Seria possível adicionar um filtro clicando na barra de status, para filtrar apenas um dos status?</div>
+  
+  <div class="assess" data-assess="1834977781">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1834977781" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1834977781" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1834977781" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1834977781" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1834977781" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1834977781" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1834977781" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1834977781" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1834977781" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article></div>
+</section>
+<section class="page" id="page-↳ Interna do Projeto">
+  <h3>↳ Interna do Projeto</h3>
+  <div class="hierarchy"><div class="section-block"><h4>Pessoa Revisora</h4><p class="note">4 artboards com o mesmo nome no Figma</p><ul class="frames"><li>Projetos/TestesRevisão</li></ul></div><div class="section-block"><h4>Cliente</h4><p class="note">ATENÇÃO A tela “Detalhes Plano de Ação” não tem wireframe no miro.</p><ul class="frames"><li>Projetos/Consolidação/PlanoDeAcao</li><li>Projetos/Consolidação/Melhoria</li><li>Projetos/Consolidação/Problema</li><li>Projetos/Consolidação/NovoPlanoDeAcao</li><li>Projetos/Consolidação/Blank</li><li>Projetos/Consolidação/Default</li><li>Homepage / Blank</li></ul></div><div class="section-block"><h4>Gerente</h4><ul class="frames"><li>Projetos/Riscos/ImportarRisco/Erro</li><li>Projetos/Riscos/ImportarRisco/Sucesso</li><li>Projetos/Riscos/ImportarRisco/Confirmacao</li><li>Projetos/Riscos</li><li>Projetos/Riscos/Feedback/Erro</li><li>Projetos/Riscos/Feedback/Sucesso</li><li>Projetos/Registro</li><li>Projetos/Registro/NovaMensagem</li><li>Projetos/Revisão/Ressalvas</li><li>Projetos/Revisão/Reprovado</li><li>Projetos/Revisão/Aprovado</li><li>Projetos/Revisão</li><li>Projetos/Consolidação/PlanoDeAcao</li><li>Projetos/Consolidação/Melhoria</li><li>Projetos/Consolidação/Problema</li><li>Projetos/Consolidação/NovoPlanoDeAcao</li><li>Projetos/Consolidação/NovoProblema</li><li>Projetos/Consolidação/NovoProblema/Blank</li><li>Projetos/Consolidação/Blank</li><li>Projetos/Consolidação/Default</li><li>Projetos/Teste/Feedback</li><li>Projetos/Riscos/Feedback</li><li>Projetos/Riscos/NovoRisco</li><li>Projetos/Riscos/Default</li><li>Projetos/Riscos/Blank</li><li>Projetos/Documentação/Error</li><li>Projetos/Documentação</li><li>Projetos/Documentação/Ideal</li><li>Projetos/Documentação/UploadLoading</li><li>Projetos/Documentação/Default</li><li>Projetos/Pessoas/Input Chip Error/Pessoas</li><li>Projetos/Pessoas/SalvarEdição/Pessoas</li><li>Projetos/Pessoas/Edição/Pessoas</li><li>Projetos/Pessoas/Ideal/Pessoas</li><li>Projetos/Pessoas/Active/Pessoas</li><li>Projetos/Pessoas/Default/Pessoas</li></ul></div><div class="section-block"><h4>Auditor</h4><ul class="frames"><li>Projetos/Consolidação/PlanoDeAcao</li><li>Projetos/Consolidação/Melhoria</li><li>Projetos/Consolidação/Problema</li><li>Projetos/Consolidação/NovoPlanoDeAcao</li><li>Projetos/Consolidação/NovoProblema</li><li>Projetos/Consolidação/NovoProblema/Blank</li><li>Projetos/Consolidação/Blank</li><li>Projetos/Consolidação/Default</li><li>Projetos/Teste/Feedback</li><li>Projetos/Riscos/Feedback</li><li>Projetos/Riscos/NovoRisco</li><li>Projetos/Riscos/Default</li><li>Projetos/Riscos/Blank</li><li>Projetos/Documentação/Error</li><li>Projetos/Documentação</li><li>Projetos/Documentação/Ideal</li><li>Projetos/Documentação/UploadLoading</li><li>Projetos/Documentação/Default</li><li>Projetos/Pessoas/Input Chip Error/Pessoas</li><li>Projetos/Pessoas/SalvarEdição/Pessoas</li><li>Projetos/Pessoas/Edição/Pessoas</li><li>Projetos/Pessoas/Ideal/Pessoas</li><li>Projetos/Pessoas/Active/Pessoas</li><li>Projetos/Pessoas/Default/Pessoas</li></ul></div></div>
+  <h4 class="comments-heading">Comentários abertos (Bruno / Nathalia)</h4>
+  <div class="comments">
+<article class="comment-card" data-id="1834987080" data-author="bruno">
+  <header class="comment-head">
+    <span class="badge bruno">Bruno de Paula</span>
+    <span class="meta">node <code>10:31253</code></span>
+  </header>
+  <div class="comment-body">Alterar para Resumo do processo</div>
+  
+  <div class="assess" data-assess="1834987080">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1834987080" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1834987080" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1834987080" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1834987080" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1834987080" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1834987080" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1834987080" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1834987080" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1834987080" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1834990690" data-author="bruno">
+  <header class="comment-head">
+    <span class="badge bruno">Bruno de Paula</span>
+    <span class="meta">node <code>10:31250</code></span>
+  </header>
+  <div class="comment-body">Mudar para Objetivo</div>
+  
+  <div class="assess" data-assess="1834990690">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1834990690" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1834990690" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1834990690" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1834990690" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1834990690" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1834990690" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1834990690" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1834990690" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1834990690" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835004625" data-author="bruno">
+  <header class="comment-head">
+    <span class="badge bruno">Bruno de Paula</span>
+    <span class="meta">node <code>10:35254</code></span>
+  </header>
+  <div class="comment-body">Tela selecionada apresentada como consolidação e não Testes</div>
+  
+  <div class="assess" data-assess="1835004625">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835004625" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835004625" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835004625" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835004625" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835004625" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835004625" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835004625" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835004625" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835004625" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835013269" data-author="bruno">
+  <header class="comment-head">
+    <span class="badge bruno">Bruno de Paula</span>
+    <span class="meta">node <code>72:42676</code></span>
+  </header>
+  <div class="comment-body">Podemos retirar o status do risco na aba de testes</div>
+  
+  <div class="assess" data-assess="1835013269">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835013269" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835013269" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835013269" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835013269" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835013269" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835013269" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835013269" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835013269" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835013269" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835017495" data-author="bruno">
+  <header class="comment-head">
+    <span class="badge bruno">Bruno de Paula</span>
+    <span class="meta">node <code>12:42410</code></span>
+  </header>
+  <div class="comment-body">Aqui não vamos avaliar o resultado do risco, mas sim o resultado do Teste. Não há necessidade de avaliar o resultado do Risco</div>
+  
+  <div class="assess" data-assess="1835017495">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835017495" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835017495" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835017495" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835017495" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835017495" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835017495" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835017495" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835017495" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835017495" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835106842" data-author="bruno">
+  <header class="comment-head">
+    <span class="badge bruno">Bruno de Paula</span>
+    <span class="meta">node <code>10:35379</code></span>
+  </header>
+  <div class="comment-body">Não fica claro nessa tela se é possível selecionar riscos já cadastrados</div>
+  
+  <div class="assess" data-assess="1835106842">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835106842" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835106842" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835106842" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835106842" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835106842" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835106842" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835106842" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835106842" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835106842" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835117485" data-author="bruno">
+  <header class="comment-head">
+    <span class="badge bruno">Bruno de Paula</span>
+    <span class="meta">node <code>12:42410</code></span>
+  </header>
+  <div class="comment-body">Incluir campo para avaliar o resultado do teste se ele passou ou não.</div>
+  <div class="reply"><strong>Bruno de Paula:</strong> Status do Teste:
+
+Sem exceção
+Oportunidade de melhoria
+Problema identificado</div>
+  <div class="assess" data-assess="1835117485">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835117485" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835117485" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835117485" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835117485" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835117485" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835117485" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835117485" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835117485" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835117485" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835118067" data-author="bruno">
+  <header class="comment-head">
+    <span class="badge bruno">Bruno de Paula</span>
+    <span class="meta">node <code>12:42410</code></span>
+  </header>
+  <div class="comment-body">Avaliar Teste</div>
+  
+  <div class="assess" data-assess="1835118067">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835118067" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835118067" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835118067" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835118067" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835118067" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835118067" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835118067" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835118067" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835118067" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835126012" data-author="bruno">
+  <header class="comment-head">
+    <span class="badge bruno">Bruno de Paula</span>
+    <span class="meta">node <code>10:35210</code></span>
+  </header>
+  <div class="comment-body">Trazer resultado do teste no card/filtros</div>
+  
+  <div class="assess" data-assess="1835126012">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835126012" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835126012" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835126012" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835126012" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835126012" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835126012" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835126012" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835126012" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835126012" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835137881" data-author="bruno">
+  <header class="comment-head">
+    <span class="badge bruno">Bruno de Paula</span>
+    <span class="meta">node <code>11:38804</code></span>
+  </header>
+  <div class="comment-body">Remover status do risco</div>
+  
+  <div class="assess" data-assess="1835137881">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835137881" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835137881" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835137881" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835137881" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835137881" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835137881" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835137881" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835137881" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835137881" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835154123" data-author="bruno">
+  <header class="comment-head">
+    <span class="badge bruno">Bruno de Paula</span>
+    <span class="meta">node <code>10:23008</code></span>
+  </header>
+  <div class="comment-body">Status:<br><br>Avaliado<br>Não Avaliado<br>Justificado</div>
+  
+  <div class="assess" data-assess="1835154123">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835154123" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835154123" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835154123" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835154123" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835154123" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835154123" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835154123" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835154123" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835154123" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835187840" data-author="bruno">
+  <header class="comment-head">
+    <span class="badge bruno">Bruno de Paula</span>
+    <span class="meta">node <code>13:19966</code></span>
+  </header>
+  <div class="comment-body">Precisamos incluir em algum lugar uma aba (tela) ou campo para incluir a opinião final do processo. e gerar o relatório de auditoria, esse processo precisa ser executado após o processo de consolidação</div>
+  
+  <div class="assess" data-assess="1835187840">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835187840" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835187840" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835187840" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835187840" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835187840" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835187840" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835187840" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835187840" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835187840" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1842401170" data-author="bruno">
+  <header class="comment-head">
+    <span class="badge bruno">Bruno de Paula</span>
+    <span class="meta">node <code>64:36484</code></span>
+  </header>
+  <div class="comment-body">Esse campo seria a Resalva ?</div>
+  
+  <div class="assess" data-assess="1842401170">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1842401170" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1842401170" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1842401170" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1842401170" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1842401170" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1842401170" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1842401170" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1842401170" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1842401170" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835523033" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>12:45786</code></span>
+  </header>
+  <div class="comment-body">Além dos responsáveis, incluir campo para cadastrar &quot;Pessoas Participantes&quot;</div>
+  
+  <div class="assess" data-assess="1835523033">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835523033" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835523033" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835523033" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835523033" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835523033" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835523033" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835523033" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835523033" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835523033" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835546963" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>12:46280</code></span>
+  </header>
+  <div class="comment-body">Sim, faz sentido manter a informação de qual problema e melhoria estão atrelados ao plano de ação. Não vejo a necessidade de incluir status, só relacionar mesmo os problemas e melhorias (em validação interna auditoria).</div>
+  
+  <div class="assess" data-assess="1835546963">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835546963" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835546963" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835546963" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835546963" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835546963" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835546963" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835546963" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835546963" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835546963" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835557957" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>13:19966</code></span>
+  </header>
+  <div class="comment-body">Ao invés de Consolidação e Acompanhamento seria melhor Problemas/melhorias e Planos de Ação (em validação interna auditoria)</div>
+  
+  <div class="assess" data-assess="1835557957">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835557957" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835557957" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835557957" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835557957" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835557957" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835557957" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835557957" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835557957" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835557957" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835565599" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>111:50305</code></span>
+  </header>
+  <div class="comment-body">Além dos responsáveis, incluir campo para cadastrar &quot;Pessoas Participantes&quot;</div>
+  
+  <div class="assess" data-assess="1835565599">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835565599" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835565599" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835565599" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835565599" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835565599" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835565599" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835565599" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835565599" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835565599" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835568615" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>111:50878</code></span>
+  </header>
+  <div class="comment-body">Sim, faz sentido manter a informação de qual problema e melhoria estão atrelados ao plano de ação. Não vejo a necessidade de incluir status, só relacionar mesmo os problemas e melhorias (em validação interna auditoria).</div>
+  
+  <div class="assess" data-assess="1835568615">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835568615" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835568615" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835568615" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835568615" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835568615" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835568615" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835568615" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835568615" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835568615" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835742485" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>10:32126</code></span>
+  </header>
+  <div class="comment-body">Ação da gestão</div>
+  
+  <div class="assess" data-assess="1835742485">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835742485" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835742485" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835742485" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835742485" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835742485" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835742485" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835742485" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835742485" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835742485" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1841305741" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>64:32487</code></span>
+  </header>
+  <div class="comment-body">Comentário na visão AUDITOR</div>
+  
+  <div class="assess" data-assess="1841305741">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1841305741" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1841305741" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1841305741" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1841305741" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1841305741" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1841305741" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1841305741" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1841305741" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1841305741" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1841306615" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>64:32730</code></span>
+  </header>
+  <div class="comment-body">Comentário na visão AUDITOR</div>
+  
+  <div class="assess" data-assess="1841306615">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1841306615" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1841306615" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1841306615" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1841306615" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1841306615" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1841306615" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1841306615" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1841306615" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1841306615" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1841307402" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>64:32907</code></span>
+  </header>
+  <div class="comment-body">Comentário na visão AUDITOR</div>
+  
+  <div class="assess" data-assess="1841307402">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1841307402" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1841307402" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1841307402" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1841307402" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1841307402" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1841307402" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1841307402" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1841307402" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1841307402" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1841309656" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>64:33846</code></span>
+  </header>
+  <div class="comment-body">Comentário na visão AUDITOR</div>
+  
+  <div class="assess" data-assess="1841309656">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1841309656" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1841309656" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1841309656" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1841309656" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1841309656" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1841309656" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1841309656" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1841309656" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1841309656" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1841310209" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>64:33846</code></span>
+  </header>
+  <div class="comment-body">Comentário na visão AUDITOR</div>
+  
+  <div class="assess" data-assess="1841310209">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1841310209" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1841310209" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1841310209" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1841310209" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1841310209" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1841310209" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1841310209" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1841310209" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1841310209" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1841312603" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>64:34672</code></span>
+  </header>
+  <div class="comment-body">Comentário na visão AUDITOR</div>
+  
+  <div class="assess" data-assess="1841312603">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1841312603" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1841312603" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1841312603" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1841312603" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1841312603" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1841312603" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1841312603" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1841312603" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1841312603" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1841317579" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>64:34232</code></span>
+  </header>
+  <div class="comment-body">Comentários na visão AUDITOR</div>
+  
+  <div class="assess" data-assess="1841317579">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1841317579" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1841317579" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1841317579" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1841317579" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1841317579" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1841317579" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1841317579" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1841317579" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1841317579" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1841323200" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>64:35656</code></span>
+  </header>
+  <div class="comment-body">Comentário na visão AUDITOR</div>
+  
+  <div class="assess" data-assess="1841323200">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1841323200" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1841323200" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1841323200" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1841323200" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1841323200" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1841323200" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1841323200" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1841323200" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1841323200" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1841323751" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>64:36229</code></span>
+  </header>
+  <div class="comment-body">Comentário na visão AUDITOR</div>
+  
+  <div class="assess" data-assess="1841323751">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1841323751" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1841323751" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1841323751" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1841323751" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1841323751" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1841323751" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1841323751" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1841323751" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1841323751" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1841326368" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>64:36234</code></span>
+  </header>
+  <div class="comment-body">Comentário na visão AUDITOR</div>
+  
+  <div class="assess" data-assess="1841326368">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1841326368" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1841326368" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1841326368" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1841326368" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1841326368" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1841326368" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1841326368" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1841326368" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1841326368" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article></div>
+</section>
+<section class="page" id="page--&gt; Acompanhamento">
+  <h3>-&gt; Acompanhamento</h3>
+  <div class="hierarchy"><div class="section-block"><h4>Auditor/Gestor/Cliente</h4><ul class="frames"><li>Acompanhamento/Default</li><li>Acompanhamento/Blank</li></ul></div></div>
+  <h4 class="comments-heading">Comentários abertos (Bruno / Nathalia)</h4>
+  <div class="comments">
+<article class="comment-card" data-id="1835743238" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>16:38041</code></span>
+  </header>
+  <div class="comment-body">Ao invés de plano de ação trazer o total de problemas</div>
+  
+  <div class="assess" data-assess="1835743238">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835743238" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835743238" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835743238" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835743238" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835743238" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835743238" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835743238" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835743238" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835743238" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835746574" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>17:38898</code></span>
+  </header>
+  <div class="comment-body">Esse status trará qual informação? acredito que aqui não haverá status</div>
+  
+  <div class="assess" data-assess="1835746574">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835746574" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835746574" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835746574" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835746574" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835746574" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835746574" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835746574" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835746574" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835746574" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835747369" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>110:64405</code></span>
+  </header>
+  <div class="comment-body">Teria como incluir pessoa responsável pelo plano de ação no filtro?</div>
+  
+  <div class="assess" data-assess="1835747369">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835747369" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835747369" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835747369" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835747369" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835747369" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835747369" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835747369" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835747369" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835747369" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article></div>
+</section>
+<section class="page" id="page-↳ Interna Auditoria">
+  <h3>↳ Interna Auditoria</h3>
+  <div class="hierarchy"><div class="section-block"><h4>Cliente</h4><ul class="frames"><li>Acompanhamento/Auditoria/EditarFeedback</li><li>Acompanhamento/Auditoria/PostergarFeedback</li><li>Acompanhamento/Auditoria/PostergarFeedback</li><li>Acompanhamento/Auditoria/EditarFeedback</li><li>Acompanhamento/Auditoria/Registro</li><li>Acompanhamento/Auditoria/Registro</li><li>Acompanhamento/Auditoria/Registro</li><li>Acompanhamento/Auditoria/Postergar</li><li>Acompanhamento/Auditoria/Postergar</li><li>Acompanhamento/Auditoria/Editar</li><li>Acompanhamento/Auditoria/Editar</li><li>Acompanhamento/Auditoria</li></ul></div><div class="section-block"><h4>Auditor/Gestor/Cliente</h4><ul class="frames"><li>Acompanhamento/Auditoria/Registro</li><li>Acompanhamento/Auditoria/Registro</li><li>Acompanhamento/Auditoria/Registro</li><li>Acompanhamento/Auditoria/ModalFeedback</li><li>Acompanhamento/Auditoria/ModalFeedback</li><li>Acompanhamento/Auditoria/ModalFeedback</li><li>Acompanhamento/Auditoria/EditarFeedback</li><li>Acompanhamento/Auditoria/EditarFeedback</li><li>Acompanhamento/Auditoria/PostergarFeedback</li><li>Acompanhamento/Auditoria/PostergarFeedback</li><li>Acompanhamento/Auditoria/Postergar</li><li>Acompanhamento/Auditoria/Postergar</li><li>Acompanhamento/Auditoria/Editar</li><li>Acompanhamento/Auditoria/Editar</li><li>Acompanhamento/Auditoria</li><li>Acompanhamento/Auditoria/EditarFeedback</li><li>Acompanhamento/Auditoria/PostergarFeedback</li><li>Acompanhamento/Auditoria/PostergarFeedback</li><li>Acompanhamento/Auditoria/EditarFeedback</li><li>Acompanhamento/Auditoria/Registro</li><li>Acompanhamento/Auditoria/Registro</li><li>Acompanhamento/Auditoria/Registro</li><li>Acompanhamento/Auditoria/Postergar</li><li>Acompanhamento/Auditoria/Postergar</li><li>Acompanhamento/Auditoria/Editar</li><li>Acompanhamento/Auditoria/Editar</li><li>Acompanhamento/Auditoria</li></ul></div></div>
+  <h4 class="comments-heading">Comentários abertos (Bruno / Nathalia)</h4>
+  <div class="comments">
+<article class="comment-card" data-id="1842411721" data-author="bruno">
+  <header class="comment-head">
+    <span class="badge bruno">Bruno de Paula</span>
+    <span class="meta">node <code>110:65179</code></span>
+  </header>
+  <div class="comment-body">Alterar o texto para Solicitar</div>
+  
+  <div class="assess" data-assess="1842411721">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1842411721" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1842411721" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1842411721" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1842411721" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1842411721" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1842411721" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1842411721" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1842411721" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1842411721" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835753416" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>21:40049</code></span>
+  </header>
+  <div class="comment-body">Cliente não pode ter acesso a edição das informações do plano de ação</div>
+  
+  <div class="assess" data-assess="1835753416">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835753416" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835753416" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835753416" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835753416" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835753416" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835753416" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835753416" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835753416" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835753416" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835756605" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>110:65007</code></span>
+  </header>
+  <div class="comment-body">Cliente não pode ter acesso a edição das informações do plano de ação</div>
+  
+  <div class="assess" data-assess="1835756605">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835756605" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835756605" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835756605" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835756605" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835756605" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835756605" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835756605" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835756605" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835756605" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835757330" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>110:65179</code></span>
+  </header>
+  <div class="comment-body">Incluir um campo texto simples para justificativa da solicitação da postergação</div>
+  
+  <div class="assess" data-assess="1835757330">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835757330" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835757330" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835757330" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835757330" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835757330" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835757330" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835757330" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835757330" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835757330" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article>
+<article class="comment-card" data-id="1835758489" data-author="nathalia">
+  <header class="comment-head">
+    <span class="badge nathalia">Nathalia Bertoldo</span>
+    <span class="meta">node <code>110:65179</code></span>
+  </header>
+  <div class="comment-body">Está previsto a mesma tela para quando o cliente quiser fazer outra solicitação? pausa, cancelamento e conclusão</div>
+  
+  <div class="assess" data-assess="1835758489">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q q-scope">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835758489" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835758489" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q q-effort">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835758489" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835758489" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835758489" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q q-crono">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835758489" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835758489" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835758489" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q q-custo">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835758489" rows="2" placeholder="Descreva termos que aumentam esforço, cronograma ou custo"></textarea>
+      </div>
+    </div>
+  </div>
+</article></div>
+</section>
+<section class="page" id="page--&gt; Biblioteca de Riscos">
+  <h3>-&gt; Biblioteca de Riscos</h3>
+  <div class="hierarchy"><div class="section-block"><h4>Auditor/Gestor</h4><ul class="frames"><li>Biblioteca/Modal/EnviarRiscos/Feedback</li><li>Biblioteca/Modal/EnviarRiscos/Feedback</li><li>Biblioteca/Modal/EnviarRiscos/Feedback</li><li>Biblioteca/Modal/EnviarRiscos</li><li>Biblioteca/Modal/NovoRisco</li><li>Biblioteca/Default</li><li>Biblioteca/Default</li><li>Biblioteca/Default</li><li>Biblioteca/Blank</li></ul></div></div>
+  <h4 class="comments-heading">Comentários abertos (Bruno / Nathalia)</h4>
+  <p class="muted">Sem comentários abertos de Bruno/Nathalia nesta página.</p>
+</section>
+<section class="page" id="page-↳ Interna do Risco">
+  <h3>↳ Interna do Risco</h3>
+  <div class="hierarchy"><div class="section-block"><h4>Auditor</h4><ul class="frames"><li>Biblioteca/DetalheRisco/EnviarRisco</li><li>Biblioteca/DetalheRisco/EnviarRisco</li><li>Biblioteca/DetalheRisco/ModalFeedback</li><li>Biblioteca/DetalheRisco/ModalFeedback</li><li>Biblioteca/DetalheRisco/ModalFeedback</li><li>Biblioteca/DetalheRisco</li></ul></div></div>
+  <h4 class="comments-heading">Comentários abertos (Bruno / Nathalia)</h4>
+  <p class="muted">Sem comentários abertos de Bruno/Nathalia nesta página.</p>
+</section>
+<section class="page" id="page--&gt; Visão Geral">
+  <h3>-&gt; Visão Geral</h3>
+  <div class="hierarchy"><div class="section-block"><h4>Auditor/Gestor/Cliente</h4><p class="note">ATENÇÃO: tela não existe no wireframe — validar.</p><ul class="frames"><li>VisaoGeral/Default</li><li>VisaoGeral/Blank</li></ul></div></div>
+  <h4 class="comments-heading">Comentários abertos (Bruno / Nathalia)</h4>
+  <p class="muted">Sem comentários abertos de Bruno/Nathalia nesta página.</p>
+</section>
+
+  <footer class="note-foot">
+    Quando marcar <strong>Absorvido</strong>, os campos de esforço, cronograma e custo adicional ficam ocultos.
+    Comentários da Gabi (internos/resolvidos) não entram neste formulário.
+  </footer>
+</div>
+<script>
+(function() {
+  const KEY = 'hercules-fase2-avaliacao-v1';
+
+  function save() {
+    const data = {};
+    document.querySelectorAll('.assess').forEach(box => {
+      const id = box.dataset.assess;
+      const scope = box.querySelector(`input[name="scope-${id}"]:checked`)?.value || '';
+      const effort = box.querySelector(`input[name="effort-${id}"]:checked`)?.value || '';
+      const effortText = box.querySelector(`input[name="effort-text-${id}"]`)?.value || '';
+      const crono = box.querySelector(`input[name="crono-${id}"]:checked`)?.value || '';
+      const cronoText = box.querySelector(`input[name="crono-text-${id}"]`)?.value || '';
+      const custo = box.querySelector(`textarea[name="custo-${id}"]`)?.value || '';
+      data[id] = { scope, effort, effortText, crono, cronoText, custo };
+    });
+    localStorage.setItem(KEY, JSON.stringify(data));
+  }
+
+  function applyScope(box) {
+    const id = box.dataset.assess;
+    const scope = box.querySelector(`input[name="scope-${id}"]:checked`)?.value;
+    const impact = box.querySelector('.impact-fields');
+    const effortText = box.querySelector(`input[name="effort-text-${id}"]`);
+    const cronoText = box.querySelector(`input[name="crono-text-${id}"]`);
+    if (scope === 'nao') {
+      impact.hidden = false;
+    } else {
+      impact.hidden = true;
+    }
+    const effort = box.querySelector(`input[name="effort-${id}"]:checked`)?.value;
+    const crono = box.querySelector(`input[name="crono-${id}"]:checked`)?.value;
+    if (effortText) effortText.disabled = effort !== 'sim';
+    if (cronoText) cronoText.disabled = crono !== 'sim';
+  }
+
+  function load() {
+    let data = {};
+    try { data = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+    Object.entries(data).forEach(([id, v]) => {
+      const box = document.querySelector(`.assess[data-assess="${id}"]`);
+      if (!box) return;
+      if (v.scope) {
+        const el = box.querySelector(`input[name="scope-${id}"][value="${v.scope}"]`);
+        if (el) el.checked = true;
+      }
+      if (v.effort) {
+        const effortMap = { aumenta: 'sim', ok: 'nao' };
+        const effortVal = effortMap[v.effort] || v.effort;
+        const el = box.querySelector(`input[name="effort-${id}"][value="${effortVal}"]`);
+        if (el) el.checked = true;
+      }
+      if (v.crono) {
+        const cronoMap = { impacta: 'sim' };
+        const cronoVal = cronoMap[v.crono] || v.crono;
+        const el = box.querySelector(`input[name="crono-${id}"][value="${cronoVal}"]`);
+        if (el) el.checked = true;
+      }
+      const et = box.querySelector(`input[name="effort-text-${id}"]`);
+      const ct = box.querySelector(`input[name="crono-text-${id}"]`);
+      const cu = box.querySelector(`textarea[name="custo-${id}"]`);
+      if (et) et.value = v.effortText || '';
+      if (ct) ct.value = v.cronoText || '';
+      if (cu) cu.value = v.custo || '';
+      applyScope(box);
+    });
+  }
+
+  document.querySelectorAll('.assess').forEach(box => {
+    box.addEventListener('change', () => { applyScope(box); save(); });
+    box.addEventListener('input', () => save());
+  });
+
+  document.getElementById('btnExport').addEventListener('click', () => {
+    save();
+    const blob = new Blob([localStorage.getItem(KEY) || '{}'], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'hercules-fase2-avaliacao.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+  document.getElementById('btnPrint').addEventListener('click', () => window.print());
+  document.getElementById('btnClear').addEventListener('click', () => {
+    if (!confirm('Limpar todas as respostas salvas neste navegador?')) return;
+    localStorage.removeItem(KEY);
+    location.reload();
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>

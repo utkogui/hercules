@@ -1,0 +1,15 @@
+# Não sobe no deploy
+node_modules/
+.git/
+.DS_Store
+.env
+*.log
+
+# Design system local (logos já estão em public/assets/brand)
+@ - matilha-ds/
+
+# HTMLs de trabalho / rascunho (app usa public/)
+galeria-frames-auditor.html
+inventario-auditor-bruno.html
+inventario-figma-hercules-fase2.html
+inventario-figma-hercules-fase2.md

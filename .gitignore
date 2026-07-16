@@ -1,0 +1,7 @@
+node_modules/
+.DS_Store
+.env
+*.log
+
+# Design system (não faz parte do app em produção)
+@ - matilha-ds/

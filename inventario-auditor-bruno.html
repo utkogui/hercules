@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hércules — Auditor · Comentários Bruno (avaliação)</title>
+<style>
+  :root {
+    --bg:#eef2f6; --card:#fff; --ink:#152033; --muted:#5a6b7d; --line:#d5dee8;
+    --bruno:#1f4b99; --accent:#c45c26;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; font-family:"Source Sans 3","Segoe UI",sans-serif; color:var(--ink);
+    background: linear-gradient(180deg,#e7eef7 0%, var(--bg) 240px);
+    line-height:1.45;
+  }
+  .wrap { max-width:920px; margin:0 auto; padding:28px 18px 72px; }
+  .hero {
+    background: linear-gradient(135deg,#0f2744,#1a4a6e 60%,#1f5c57);
+    color:#f4f7fb; border-radius:16px; padding:26px; margin-bottom:22px;
+    box-shadow:0 14px 36px rgba(15,39,68,.25);
+  }
+  .hero h1 { margin:0 0 8px; font-size:1.45rem; }
+  .hero p { margin:0; opacity:.9; max-width:65ch; }
+  .toolbar { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+  .toolbar button {
+    border:0; border-radius:999px; padding:10px 14px; font:inherit; font-weight:600; cursor:pointer;
+  }
+  .toolbar .primary { background:#fff; color:#0f2744; }
+  .toolbar .ghost { background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.28); }
+  .stats { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:20px; }
+  .stat { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 14px; }
+  .stat strong { font-size:1.35rem; display:block; }
+  .stat span { color:var(--muted); font-size:.9rem; }
+  .page {
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:18px 18px 8px; margin-bottom:18px;
+  }
+  .page > h2 { margin:0 0 14px; font-size:1.2rem; }
+  .persona-title {
+    margin:0 0 14px; padding:10px 12px; border-radius:10px;
+    background:linear-gradient(90deg,#123554,#1a4d73); color:#fff; font-size:1.02rem;
+  }
+  .frame-card {
+    border:1px solid var(--line); border-radius:14px; padding:14px; margin:0 0 18px;
+    background:#fbfcfe;
+  }
+  .frame-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom:10px; }
+  .frame-head h4 { margin:0 0 4px; font-size:1.05rem; }
+  .hint { margin:0; color:var(--muted); font-size:.9rem; }
+  .figma-link {
+    flex:0 0 auto; text-decoration:none; font-weight:700; font-size:.85rem;
+    color:var(--bruno); border:1px solid #c9d7ea; background:#eef4fb;
+    border-radius:999px; padding:8px 12px; white-space:nowrap;
+  }
+  .frame-img {
+    width:100%; border-radius:10px; border:1px solid var(--line); display:block; margin-bottom:12px;
+    background:#1a2332;
+  }
+  .comments-under-frame { display:flex; flex-direction:column; gap:12px; }
+  .comment-card {
+    border:1px solid #d7e0eb; border-radius:12px; padding:12px; background:#fff;
+  }
+  .comment-head { display:flex; gap:8px; align-items:center; margin-bottom:8px; flex-wrap:wrap; }
+  .badge.bruno { background:var(--bruno); color:#fff; border-radius:999px; padding:4px 10px; font-size:.78rem; font-weight:700; }
+  .meta { color:var(--muted); font-size:.8rem; }
+  .comment-body { font-size:.98rem; margin-bottom:8px; }
+  .reply { background:#eef3f8; border-radius:8px; padding:8px 10px; font-size:.9rem; margin-bottom:8px; }
+  .assess { border-top:1px solid var(--line); padding-top:12px; margin-top:4px; }
+  .assess-title { margin:0 0 10px; font-weight:700; font-size:.92rem; }
+  .q { margin-bottom:12px; }
+  .q > label { display:block; font-weight:600; margin-bottom:6px; font-size:.92rem; }
+  .choices { display:flex; flex-wrap:wrap; gap:8px; }
+  .chip {
+    display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line);
+    border-radius:999px; padding:6px 12px; background:#fff; cursor:pointer; font-size:.9rem;
+  }
+  .chip:has(input:checked) { border-color:var(--accent); background:#fff4ec; }
+  .row { display:grid; grid-template-columns:auto 1fr; gap:10px; align-items:center; }
+  @media (max-width:720px) {
+    .row { grid-template-columns:1fr; }
+    .stats { grid-template-columns:1fr; }
+    .frame-head { flex-direction:column; }
+  }
+  input.free, textarea {
+    width:100%; border:1px solid var(--line); border-radius:10px; padding:9px 11px; font:inherit; background:#fff;
+  }
+  input.free:disabled { background:#eef1f4; color:#8a97a5; }
+  .impact-fields[hidden] { display:none !important; }
+  .note { color:var(--muted); font-size:.88rem; margin-top:18px; }
+  @media print { .toolbar { display:none; } .frame-card { break-inside:avoid; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1>Hércules Fase 2 — Fluxo Auditor (comentários Bruno)</h1>
+    <p>Somente <strong>Projetos Lista</strong> e <strong>Interna do Projeto</strong>, no espaço <strong>Auditor</strong>.
+    Em cada frame: preview/contexto → comentário do Bruno → perguntas logo abaixo.</p>
+    <div class="toolbar">
+      <a class="primary" href="galeria-frames-auditor.html" style="text-decoration:none;display:inline-block">Galeria com zoom ↗</a>
+      <button type="button" class="primary" id="btnExport">Exportar respostas (JSON)</button>
+      <button type="button" class="ghost" id="btnPrint">Imprimir / PDF</button>
+      <button type="button" class="ghost" id="btnClear">Limpar respostas</button>
+    </div>
+  </header>
+  <div class="stats">
+    <div class="stat"><strong>15</strong><span>Comentários abertos do Bruno</span></div>
+    <div class="stat"><strong>11</strong><span>Frames no fluxo</span></div>
+  </div>
+  <section class="page"><h2>-&gt; Projetos Lista</h2><div class="persona"><h3 class="persona-title">Fluxo: Auditor / Gestor</h3><div class="frame-card"><div class="frame-head"><div><h4>Projetos / Default — filtros e busca</h4><p class="hint">Lista de projetos: barra de status e campo de busca</p></div><a class="figma-link" href="https://www.figma.com/design/jErSjK4ILwFI4dPwIptz1v/?node-id=10-7368" target="_blank" rel="noopener">Abrir frame no Figma ↗</a></div><img class="frame-img" src="assets/frames/10-7368.png" alt="Projetos / Default — filtros e busca"><div class="comments-under-frame"><article class="comment-card"><header class="comment-head"><span class="badge bruno">Bruno de Paula</span><span class="meta">node <code>10:7368</code></span></header><div class="comment-body">Esse campo vai buscar apenas por risco ? não seria uma busca geral ou por projetos ?</div><div class="assess" data-assess="1834974955">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1834974955" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1834974955" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1834974955" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1834974955" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1834974955" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1834974955" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1834974955" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1834974955" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1834974955" rows="2" placeholder="Descreva os motivos"></textarea>
+      </div>
+    </div>
+  </div></article><article class="comment-card"><header class="comment-head"><span class="badge bruno">Bruno de Paula</span><span class="meta">node <code>10:7368</code></span></header><div class="comment-body">Seria possível adicionar um filtro clicando na barra de status, para filtrar apenas um dos status?</div><div class="assess" data-assess="1834977781">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1834977781" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1834977781" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1834977781" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1834977781" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1834977781" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1834977781" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1834977781" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1834977781" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1834977781" rows="2" placeholder="Descreva os motivos"></textarea>
+      </div>
+    </div>
+  </div></article></div></div></div></section><section class="page"><h2>↳ Interna do Projeto</h2><div class="persona"><h3 class="persona-title">Fluxo: Auditor</h3><div class="frame-card"><div class="frame-head"><div><h4>Detalhe Auditoria / Início</h4><p class="hint">Aba Início — Frente de Missão, Área, Resumo etc. · Frame 625794</p></div><a class="figma-link" href="https://www.figma.com/design/jErSjK4ILwFI4dPwIptz1v/?node-id=10-31250" target="_blank" rel="noopener">Abrir frame no Figma ↗</a></div><img class="frame-img" src="assets/frames/10-31250.png" alt="Detalhe Auditoria / Início"><div class="comments-under-frame"><article class="comment-card"><header class="comment-head"><span class="badge bruno">Bruno de Paula</span><span class="meta">node <code>10:31253</code></span></header><div class="comment-body">Alterar para Resumo do processo</div><div class="assess" data-assess="1834987080">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1834987080" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1834987080" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1834987080" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1834987080" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1834987080" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1834987080" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1834987080" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1834987080" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1834987080" rows="2" placeholder="Descreva os motivos"></textarea>
+      </div>
+    </div>
+  </div></article><article class="comment-card"><header class="comment-head"><span class="badge bruno">Bruno de Paula</span><span class="meta">node <code>10:31250</code></span></header><div class="comment-body">Mudar para Objetivo</div><div class="assess" data-assess="1834990690">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1834990690" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1834990690" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1834990690" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1834990690" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1834990690" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1834990690" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1834990690" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1834990690" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1834990690" rows="2" placeholder="Descreva os motivos"></textarea>
+      </div>
+    </div>
+  </div></article></div></div><div class="frame-card"><div class="frame-head"><div><h4>Detalhe Auditoria / Riscos — status</h4><p class="hint">Status: Avaliado / Não Avaliado / Justificado</p></div><a class="figma-link" href="https://www.figma.com/design/jErSjK4ILwFI4dPwIptz1v/?node-id=10-23008" target="_blank" rel="noopener">Abrir frame no Figma ↗</a></div><img class="frame-img" src="assets/frames/10-23008.png" alt="Detalhe Auditoria / Riscos — status"><div class="comments-under-frame"><article class="comment-card"><header class="comment-head"><span class="badge bruno">Bruno de Paula</span><span class="meta">node <code>10:23008</code></span></header><div class="comment-body">Status:<br><br>Avaliado<br>Não Avaliado<br>Justificado</div><div class="assess" data-assess="1835154123">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835154123" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835154123" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835154123" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835154123" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835154123" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835154123" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835154123" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835154123" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835154123" rows="2" placeholder="Descreva os motivos"></textarea>
+      </div>
+    </div>
+  </div></article></div></div><div class="frame-card"><div class="frame-head"><div><h4>Detalhe Auditoria / Riscos</h4><p class="hint">Remover status do risco</p></div><a class="figma-link" href="https://www.figma.com/design/jErSjK4ILwFI4dPwIptz1v/?node-id=11-38804" target="_blank" rel="noopener">Abrir frame no Figma ↗</a></div><img class="frame-img" src="assets/frames/11-38804.png" alt="Detalhe Auditoria / Riscos"><div class="comments-under-frame"><article class="comment-card"><header class="comment-head"><span class="badge bruno">Bruno de Paula</span><span class="meta">node <code>11:38804</code></span></header><div class="comment-body">Remover status do risco</div><div class="assess" data-assess="1835137881">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835137881" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835137881" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835137881" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835137881" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835137881" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835137881" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835137881" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835137881" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835137881" rows="2" placeholder="Descreva os motivos"></textarea>
+      </div>
+    </div>
+  </div></article></div></div><div class="frame-card"><div class="frame-head"><div><h4>Detalhe Auditoria / Testes</h4><p class="hint">Aba apresentada como Consolidação em vez de Testes</p></div><a class="figma-link" href="https://www.figma.com/design/jErSjK4ILwFI4dPwIptz1v/?node-id=10-35254" target="_blank" rel="noopener">Abrir frame no Figma ↗</a></div><img class="frame-img" src="assets/frames/10-35254.png" alt="Detalhe Auditoria / Testes"><div class="comments-under-frame"><article class="comment-card"><header class="comment-head"><span class="badge bruno">Bruno de Paula</span><span class="meta">node <code>10:35254</code></span></header><div class="comment-body">Tela selecionada apresentada como consolidação e não Testes</div><div class="assess" data-assess="1835004625">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835004625" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835004625" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835004625" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835004625" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835004625" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835004625" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835004625" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835004625" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835004625" rows="2" placeholder="Descreva os motivos"></textarea>
+      </div>
+    </div>
+  </div></article></div></div><div class="frame-card"><div class="frame-head"><div><h4>Detalhe Auditoria / Testes — cards e filtros</h4><p class="hint">Trazer resultado do teste no card/filtros</p></div><a class="figma-link" href="https://www.figma.com/design/jErSjK4ILwFI4dPwIptz1v/?node-id=10-35210" target="_blank" rel="noopener">Abrir frame no Figma ↗</a></div><img class="frame-img" src="assets/frames/10-35210.png" alt="Detalhe Auditoria / Testes — cards e filtros"><div class="comments-under-frame"><article class="comment-card"><header class="comment-head"><span class="badge bruno">Bruno de Paula</span><span class="meta">node <code>10:35210</code></span></header><div class="comment-body">Trazer resultado do teste no card/filtros</div><div class="assess" data-assess="1835126012">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835126012" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835126012" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835126012" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835126012" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835126012" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835126012" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835126012" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835126012" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835126012" rows="2" placeholder="Descreva os motivos"></textarea>
+      </div>
+    </div>
+  </div></article></div></div><div class="frame-card"><div class="frame-head"><div><h4>Detalhe Auditoria / Testes — riscos do teste</h4><p class="hint">Seleção de riscos já cadastrados</p></div><a class="figma-link" href="https://www.figma.com/design/jErSjK4ILwFI4dPwIptz1v/?node-id=10-35379" target="_blank" rel="noopener">Abrir frame no Figma ↗</a></div><img class="frame-img" src="assets/frames/10-35379.png" alt="Detalhe Auditoria / Testes — riscos do teste"><div class="comments-under-frame"><article class="comment-card"><header class="comment-head"><span class="badge bruno">Bruno de Paula</span><span class="meta">node <code>10:35379</code></span></header><div class="comment-body">Não fica claro nessa tela se é possível selecionar riscos já cadastrados</div><div class="assess" data-assess="1835106842">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835106842" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835106842" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835106842" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835106842" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835106842" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835106842" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835106842" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835106842" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835106842" rows="2" placeholder="Descreva os motivos"></textarea>
+      </div>
+    </div>
+  </div></article></div></div><div class="frame-card"><div class="frame-head"><div><h4>Detalhe Auditoria / Testes — status do risco</h4><p class="hint">Retirar status do risco na aba de testes</p></div><a class="figma-link" href="https://www.figma.com/design/jErSjK4ILwFI4dPwIptz1v/?node-id=72-42676" target="_blank" rel="noopener">Abrir frame no Figma ↗</a></div><img class="frame-img" src="assets/frames/72-42676.png" alt="Detalhe Auditoria / Testes — status do risco"><div class="comments-under-frame"><article class="comment-card"><header class="comment-head"><span class="badge bruno">Bruno de Paula</span><span class="meta">node <code>72:42676</code></span></header><div class="comment-body">Podemos retirar o status do risco na aba de testes</div><div class="assess" data-assess="1835013269">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835013269" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835013269" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835013269" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835013269" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835013269" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835013269" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835013269" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835013269" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835013269" rows="2" placeholder="Descreva os motivos"></textarea>
+      </div>
+    </div>
+  </div></article></div></div><div class="frame-card"><div class="frame-head"><div><h4>Detalhe Auditoria / Testes — Avaliar Teste</h4><p class="hint">Avaliação do resultado do teste</p></div><a class="figma-link" href="https://www.figma.com/design/jErSjK4ILwFI4dPwIptz1v/?node-id=12-42410" target="_blank" rel="noopener">Abrir frame no Figma ↗</a></div><img class="frame-img" src="assets/frames/12-42410.png" alt="Detalhe Auditoria / Testes — Avaliar Teste"><div class="comments-under-frame"><article class="comment-card"><header class="comment-head"><span class="badge bruno">Bruno de Paula</span><span class="meta">node <code>12:42410</code></span></header><div class="comment-body">Aqui não vamos avaliar o resultado do risco, mas sim o resultado do Teste. Não há necessidade de avaliar o resultado do Risco</div><div class="assess" data-assess="1835017495">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835017495" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835017495" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835017495" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835017495" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835017495" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835017495" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835017495" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835017495" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835017495" rows="2" placeholder="Descreva os motivos"></textarea>
+      </div>
+    </div>
+  </div></article><article class="comment-card"><header class="comment-head"><span class="badge bruno">Bruno de Paula</span><span class="meta">node <code>12:42410</code></span></header><div class="comment-body">Incluir campo para avaliar o resultado do teste se ele passou ou não.</div><div class="reply"><strong>Bruno de Paula:</strong> Status do Teste:  Sem exceção Oportunidade de melhoria Problema identificado</div><div class="assess" data-assess="1835117485">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835117485" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835117485" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835117485" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835117485" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835117485" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835117485" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835117485" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835117485" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835117485" rows="2" placeholder="Descreva os motivos"></textarea>
+      </div>
+    </div>
+  </div></article><article class="comment-card"><header class="comment-head"><span class="badge bruno">Bruno de Paula</span><span class="meta">node <code>12:42410</code></span></header><div class="comment-body">Avaliar Teste</div><div class="assess" data-assess="1835118067">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835118067" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835118067" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835118067" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835118067" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835118067" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835118067" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835118067" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835118067" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835118067" rows="2" placeholder="Descreva os motivos"></textarea>
+      </div>
+    </div>
+  </div></article></div></div><div class="frame-card"><div class="frame-head"><div><h4>Detalhe Auditoria / Revisão</h4><p class="hint">Opinião final e relatório de auditoria · node 13:19966</p></div><a class="figma-link" href="https://www.figma.com/design/jErSjK4ILwFI4dPwIptz1v/?node-id=13-19966" target="_blank" rel="noopener">Abrir frame no Figma ↗</a></div><img class="frame-img" src="assets/frames/13-19966.png" alt="Detalhe Auditoria / Revisão"><div class="comments-under-frame"><article class="comment-card"><header class="comment-head"><span class="badge bruno">Bruno de Paula</span><span class="meta">node <code>13:19966</code></span></header><div class="comment-body">Precisamos incluir em algum lugar uma aba (tela) ou campo para incluir a opinião final do processo. e gerar o relatório de auditoria, esse processo precisa ser executado após o processo de consolidação</div><div class="assess" data-assess="1835187840">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1835187840" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1835187840" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1835187840" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1835187840" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1835187840" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1835187840" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1835187840" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1835187840" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1835187840" rows="2" placeholder="Descreva os motivos"></textarea>
+      </div>
+    </div>
+  </div></article></div></div><div class="frame-card"><div class="frame-head"><div><h4>Projetos / Revisão / Aprovado</h4><p class="hint">Campo de Resalva · node 64:36484</p></div><a class="figma-link" href="https://www.figma.com/design/jErSjK4ILwFI4dPwIptz1v/?node-id=64-36484" target="_blank" rel="noopener">Abrir frame no Figma ↗</a></div><img class="frame-img" src="assets/frames/64-36484.png" alt="Projetos / Revisão / Aprovado"><div class="comments-under-frame"><article class="comment-card"><header class="comment-head"><span class="badge bruno">Bruno de Paula</span><span class="meta">node <code>64:36484</code></span></header><div class="comment-body">Esse campo seria a Resalva ?</div><div class="assess" data-assess="1842401170">
+    <p class="assess-title">Avaliação de impacto</p>
+    <div class="q">
+      <label>Quais itens podem ser absorvidos no escopo atual?</label>
+      <div class="choices">
+        <label class="chip"><input type="radio" name="scope-1842401170" value="absorvido"> Absorvido</label>
+        <label class="chip"><input type="radio" name="scope-1842401170" value="nao"> Não absorvido</label>
+      </div>
+    </div>
+    <div class="impact-fields" hidden>
+      <div class="q">
+        <label>Itens geram aumento de esforço?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="effort-1842401170" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="effort-1842401170" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="effort-text-1842401170" placeholder="Descreva o aumento de esforço" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Itens impactam o cronograma?</label>
+        <div class="row">
+          <div class="choices">
+            <label class="chip"><input type="radio" name="crono-1842401170" value="sim"> Sim</label>
+            <label class="chip"><input type="radio" name="crono-1842401170" value="nao"> Não</label>
+          </div>
+          <input type="text" class="free" name="crono-text-1842401170" placeholder="Descreva o impacto no cronograma" disabled>
+        </div>
+      </div>
+      <div class="q">
+        <label>Motivos para os itens podem gerar custo ou cronograma adicional?</label>
+        <textarea name="custo-1842401170" rows="2" placeholder="Descreva os motivos"></textarea>
+      </div>
+    </div>
+  </div></article></div></div></div></section>
+  <p class="note">Exemplo do anexo: em <strong>Detalhe Auditoria / Início</strong> o comentário “Mudar para Objetivo” aparece com as perguntas imediatamente abaixo do frame.</p>
+</div>
+<script>
+(function() {
+  const KEY = 'hercules-auditor-bruno-v1';
+  function save() {
+    const data = {};
+    document.querySelectorAll('.assess').forEach(box => {
+      const id = box.dataset.assess;
+      data[id] = {
+        scope: box.querySelector(`input[name="scope-${id}"]:checked`)?.value || '',
+        effort: box.querySelector(`input[name="effort-${id}"]:checked`)?.value || '',
+        effortText: box.querySelector(`input[name="effort-text-${id}"]`)?.value || '',
+        crono: box.querySelector(`input[name="crono-${id}"]:checked`)?.value || '',
+        cronoText: box.querySelector(`input[name="crono-text-${id}"]`)?.value || '',
+        custo: box.querySelector(`textarea[name="custo-${id}"]`)?.value || ''
+      };
+    });
+    localStorage.setItem(KEY, JSON.stringify(data));
+  }
+  function applyScope(box) {
+    const id = box.dataset.assess;
+    const scope = box.querySelector(`input[name="scope-${id}"]:checked`)?.value;
+    box.querySelector('.impact-fields').hidden = scope !== 'nao';
+    const effort = box.querySelector(`input[name="effort-${id}"]:checked`)?.value;
+    const crono = box.querySelector(`input[name="crono-${id}"]:checked`)?.value;
+    const effortText = box.querySelector(`input[name="effort-text-${id}"]`);
+    const cronoText = box.querySelector(`input[name="crono-text-${id}"]`);
+    if (effortText) effortText.disabled = effort !== 'sim';
+    if (cronoText) cronoText.disabled = crono !== 'sim';
+  }
+  function load() {
+    let data = {};
+    try { data = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+    Object.entries(data).forEach(([id, v]) => {
+      const box = document.querySelector(`.assess[data-assess="${id}"]`);
+      if (!box) return;
+      if (v.scope) { const el = box.querySelector(`input[name="scope-${id}"][value="${v.scope}"]`); if (el) el.checked = true; }
+      if (v.effort) { const effortVal = ({ aumenta: "sim", ok: "nao" })[v.effort] || v.effort; const el = box.querySelector(`input[name="effort-${id}"][value="${effortVal}"]`); if (el) el.checked = true; }
+      if (v.crono) { const cronoVal = ({ impacta: "sim" })[v.crono] || v.crono; const el = box.querySelector(`input[name="crono-${id}"][value="${cronoVal}"]`); if (el) el.checked = true; }
+      const et = box.querySelector(`input[name="effort-text-${id}"]`);
+      const ct = box.querySelector(`input[name="crono-text-${id}"]`);
+      const cu = box.querySelector(`textarea[name="custo-${id}"]`);
+      if (et) et.value = v.effortText || '';
+      if (ct) ct.value = v.cronoText || '';
+      if (cu) cu.value = v.custo || '';
+      applyScope(box);
+    });
+  }
+  document.querySelectorAll('.assess').forEach(box => {
+    box.addEventListener('change', () => { applyScope(box); save(); });
+    box.addEventListener('input', save);
+  });
+  document.getElementById('btnExport').onclick = () => {
+    save();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([localStorage.getItem(KEY) || '{}'], {type:'application/json'}));
+    a.download = 'hercules-auditor-bruno-avaliacao.json';
+    a.click();
+  };
+  document.getElementById('btnPrint').onclick = () => window.print();
+  document.getElementById('btnClear').onclick = () => {
+    if (confirm('Limpar respostas salvas?')) { localStorage.removeItem(KEY); location.reload(); }
+  };
+  load();
+})();
+</script>
+</body>
+</html>
