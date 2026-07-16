@@ -1,13 +1,15 @@
 # Hércules Fase 2 — Avaliação de escopo
 
-App simples (Node + Express) para avaliar comentários de interface (Bruno / Nathalia) com screenshots, abas e persistência das respostas em JSON.
+App simples (Node + Express) para avaliar comentários de interface (Bruno / Nathalia), com screenshots, abas e persistência das respostas em JSON.
 
-## Stack
+## Links
 
-- `server.js` — API + arquivos estáticos
-- `public/` — página de apresentação
-- `assets/frames/` — screenshots
-- `data/respostas.json` — respostas do time (local)
+| Quem | URL | Acesso |
+|------|-----|--------|
+| **Cliente** | `/` (ou `/cliente`) | Público. Vê o resumo das avaliações e escreve **Considerações / Dúvidas** (campo só do cliente) |
+| **Time Matilha** | `/time` | Soft login (só senha). Edita avaliações e lê o feedback do cliente em cada comentário |
+
+Salvar avaliações (`PUT /api/respostas`) exige cookie de sessão após o login. O texto do cliente fica em `consideracoes` e não sobrescreve a avaliação do time.
 
 ## Local
 
@@ -16,63 +18,57 @@ npm install
 npm start
 ```
 
-Abre em [http://localhost:3000](http://localhost:3000).
+- Cliente: [http://localhost:3000/](http://localhost:3000/)
+- Time: [http://localhost:3000/time](http://localhost:3000/time) — senha padrão `Matilha0108`
 
 ## Deploy no Railway
 
-Projeto já está pronto para *Deploy from GitHub*: sem build step especial, só `npm start`.
+### 1. Push do repositório
 
-### 1. Subir o repositório
-
-Faça push deste projeto para o GitHub (sem a pasta `@ - matilha-ds`).
+GitHub sem a pasta `@ - matilha-ds` (já no `.gitignore`).
 
 ### 2. Criar o serviço
 
-1. [Railway](https://railway.app) → **New Project** → **Deploy from GitHub repo**
+1. Railway → **New Project** → **Deploy from GitHub repo**
 2. Selecione o repositório
-3. Railway detecta Node e usa:
-   - **Start:** `npm start` (via `railway.toml` / `Procfile`)
-   - **Healthcheck:** `GET /api/health`
+3. Start: `npm start` · Healthcheck: `GET /api/health`
 
-Não é necessário configurar `PORT` — o Railway injeta automaticamente.
+### 3. Variáveis
 
-### 3. Variáveis (opcional, mas recomendado)
-
-| Variável   | Valor  | Quando                          |
-|-----------|--------|----------------------------------|
-| `DATA_DIR` | `/data` | Depois de criar o Volume (abaixo) |
-
-Sem Volume, as respostas funcionam, mas **somem a cada redeploy**.
+| Variável | Exemplo | Obrigatório |
+|----------|---------|-------------|
+| `TEAM_PASSWORD` | `Matilha0108` | Não (esse é o padrão) |
+| `AUTH_SECRET` | segredo longo | Não |
+| `DATA_DIR` | `/data` | Sim, se usar Volume |
 
 ### 4. Volume (persistir respostas)
 
-1. No serviço → **Settings** → **Volumes** → **Add Volume**
-2. Mount path: `/data`
-3. Em **Variables**, adicione:
+1. **Settings** → **Volumes** → mount `/data`
+2. Variable: `DATA_DIR=/data`
+3. Redeploy
 
-```
-DATA_DIR=/data
-```
+### 5. Domínio e links para enviar
 
-4. Redeploy
+Depois do **Generate Domain**:
 
-As respostas ficam em `/data/respostas.json`.
+- Cliente: `https://SEU-DOMINIO.up.railway.app/`
+- Time: `https://SEU-DOMINIO.up.railway.app/time` (senha soft login)
 
-### 5. Domínio
-
-**Settings** → **Networking** → **Generate Domain** (ou domínio custom).
+A aba Bruno é o padrão e **não** aparece como `#bruno` no link. Só a aba Nathalia usa `#nathalia` se o cliente trocar de aba.
 
 ## API
 
-| Método | Rota             | Uso                          |
-|--------|------------------|------------------------------|
-| `GET`  | `/api/health`    | Healthcheck                   |
-| `GET`  | `/api/respostas` | Lê o JSON salvo               |
-| `PUT`  | `/api/respostas` | Salva `{ "answers": { ... } }` |
+| Método | Rota | Quem |
+|--------|------|------|
+| `GET` | `/api/health` | Público |
+| `GET` | `/api/respostas` | Público (leitura) |
+| `PUT` | `/api/consideracoes` | Público (só campo de considerações) |
+| `POST` | `/api/auth/login` | Soft login da equipe |
+| `POST` | `/api/auth/logout` | Encerra sessão |
+| `GET` | `/api/auth/status` | Verifica cookie |
+| `PUT` | `/api/respostas` | Só equipe autenticada |
 
-A página salva automaticamente ao preencher os formulários e também permite **Exportar JSON**.
-
-## Estrutura relevante
+## Estrutura
 
 ```
 ├── server.js
@@ -80,7 +76,8 @@ A página salva automaticamente ao preencher os formulários e também permite *
 ├── Procfile
 ├── railway.toml
 ├── .env.example
-├── public/           # UI (index.html + brand)
-├── assets/frames/    # screenshots
-└── data/             # fallback local das respostas
+├── public/index.html   # servido via /, /cliente e /time
+├── public/assets/brand
+├── assets/frames/
+└── data/
 ```

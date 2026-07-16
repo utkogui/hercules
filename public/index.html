@@ -225,36 +225,26 @@ body::before {
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 18px 18px 20px;
-  margin: 0 0 32px;
+  margin: 0 0 20px;
   background: #fff;
-  box-shadow: var(--matilha-shadow-200);
+  box-shadow: var(--matilha-shadow-100);
 }
-.frame-card + .frame-card {
-  margin-top: 40px;
+.frame-card:nth-of-type(odd) {
+  background: #ffffff;
 }
-.frame-card:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -22px;
-  transform: translateX(-50%);
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--matilha-neutral-400);
-  box-shadow: -18px 0 0 var(--matilha-neutral-300), 18px 0 0 var(--matilha-neutral-300);
+.frame-card:nth-of-type(even) {
+  background: #f0f0f0;
+  border-color: #e2e2e2;
 }
-.frame-card:last-child {
+.frame-card:last-of-type {
   margin-bottom: 8px;
 }
 
 #panel-bruno .frame-card {
   border-left: 4px solid var(--bruno);
-  background: linear-gradient(180deg, #f7f9fd 0%, #ffffff 48px);
 }
 #panel-nathalia .frame-card {
   border-left: 4px solid var(--matilha-brand-yellow);
-  background: linear-gradient(180deg, #fffdf3 0%, #ffffff 48px);
 }
 
 .frame-head {
@@ -263,8 +253,11 @@ body::before {
   margin: -18px -18px 14px;
   padding: 14px 18px;
   border-bottom: 1px solid var(--line);
-  background: rgba(255,255,255,.72);
+  background: transparent;
   border-radius: 14px 14px 0 0;
+}
+.frame-card:nth-of-type(even) .frame-head {
+  border-bottom-color: #ddd;
 }
 .frame-head h4 {
   margin: 0 0 4px;
@@ -291,30 +284,33 @@ body::before {
 .comments-under-frame {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   margin-top: 4px;
   padding-top: 14px;
-  border-top: 1px dashed var(--matilha-neutral-300);
+  border-top: 1px solid var(--matilha-neutral-300);
 }
 .comment-card {
   border: 1px solid var(--line);
   border-radius: 10px;
   padding: 14px 16px;
-  background: var(--matilha-neutral-100);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.6);
+  background: #fff;
 }
-#panel-bruno .comment-card {
-  border-color: #d5e0f4;
-  background: #fbfcff;
+.frame-card:nth-of-type(odd) .comment-card {
+  background: #f7f7f7;
 }
-#panel-nathalia .comment-card {
-  border-color: #efe3a8;
-  background: #fffcf0;
-}
-.comment-card + .comment-card {
-  border-top-width: 3px;
+.frame-card:nth-of-type(even) .comment-card {
+  background: #ffffff;
+  border-color: #ddd;
 }
 .comment-head { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+.comment-num {
+  font-family: var(--font-ui);
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--matilha-neutral-800);
+  letter-spacing: -.02em;
+  min-width: 2.2ch;
+}
 .badge {
   border-radius: 999px; padding: 4px 10px;
   font-size: .76rem; font-weight: 700; font-family: var(--font-ui);
@@ -419,29 +415,213 @@ input.free:disabled { background: var(--matilha-neutral-200); color: var(--matil
   .tabs { width: 100%; }
   .tab { flex: 1; justify-content: center; }
 }
+body.is-cliente .team-only { display: none !important; }
+body.is-cliente .save-status { display: none !important; }
+body.is-cliente .assess > :not(.assess-summary):not(.client-consideracoes) { display: none !important; }
+body.is-cliente .login-gate,
+body:not(.is-equipe) .login-gate { display: none !important; }
+body.is-equipe:not(.is-unlocked) .app-shell { visibility: hidden; }
+body.is-equipe.is-unlocked .login-gate { display: none !important; }
+
+.login-gate {
+  position: fixed; inset: 0; z-index: 80;
+  display: grid; place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(700px 360px at 20% 0%, rgba(251,217,81,.22), transparent 55%),
+    radial-gradient(600px 320px at 90% 10%, rgba(60,168,251,.12), transparent 50%),
+    #fafafa;
+}
+.login-card {
+  width: min(100%, 380px);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--matilha-shadow-200);
+  padding: 28px 24px 22px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.login-card img { height: 34px; width: auto; align-self: flex-start; }
+.login-card h1 {
+  margin: 0; font-family: var(--font-ui); font-size: 1.25rem; font-weight: 700;
+  letter-spacing: -.02em;
+}
+.login-card p {
+  margin: 0; color: var(--muted); font-family: var(--font-ui); font-size: .9rem;
+}
+.login-card label {
+  font-family: var(--font-ui); font-size: .82rem; font-weight: 600; color: var(--matilha-neutral-700);
+}
+.login-card input[type="password"] {
+  width: 100%; margin-top: 6px;
+  font-family: var(--font-ui); font-size: 1rem;
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 11px 12px; outline: none;
+}
+.login-card input[type="password"]:focus {
+  border-color: var(--matilha-primary-300);
+  box-shadow: 0 0 0 3px rgba(43,99,227,.15);
+}
+.login-error {
+  min-height: 1.2em;
+  margin: 0;
+  font-family: var(--font-ui); font-size: .85rem; color: #b42318;
+}
+.login-card .btn { width: 100%; justify-content: center; margin-top: 4px; }
+
+.client-consideracoes {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.client-consideracoes label {
+  font-family: var(--font-ui);
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--matilha-neutral-800);
+}
+.client-consideracoes textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 72px;
+}
+.client-consideracoes .note-status {
+  font-family: var(--font-ui);
+  font-size: .78rem;
+  color: var(--muted);
+  min-height: 1.1em;
+}
+.team-consideracoes {
+  border-top: 1px solid var(--line);
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #f7f9fc;
+}
+.team-consideracoes .label {
+  font-family: var(--font-ui);
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--matilha-primary-400);
+  margin-bottom: 6px;
+}
+.team-consideracoes .value {
+  font-size: .92rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  color: var(--ink);
+}
+.team-consideracoes .value.is-empty {
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: .85rem;
+}
+
+.assess-summary {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.summary-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-ui);
+  font-size: .78rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 5px 11px;
+  letter-spacing: -.01em;
+}
+.tag-ok {
+  background: #e8f6ee;
+  color: #1f6b3a;
+  border: 1px solid #b7dfc4;
+}
+.tag-warn {
+  background: #fff4e5;
+  color: #8a4b00;
+  border: 1px solid #f0d2a0;
+}
+.summary-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 10px 14px;
+  align-items: start;
+  font-size: .92rem;
+}
+.summary-row .label {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: .82rem;
+  color: var(--matilha-neutral-700);
+  padding-top: 2px;
+}
+.summary-row .value {
+  color: var(--ink);
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+.summary-empty {
+  font-family: var(--font-ui);
+  font-size: .85rem;
+  color: var(--muted);
+}
+@media (max-width: 720px) {
+  .summary-row { grid-template-columns: 1fr; gap: 2px; }
+}
+
 @media print {
-  .topbar, .tabs, .lightbox, .frame-shot::after { display: none !important; }
+  .topbar, .tabs, .lightbox, .login-gate, .frame-shot::after { display: none !important; }
   .panel[hidden] { display: block !important; }
   .frame-card { break-inside: avoid; }
+  body.is-equipe:not(.is-unlocked) .app-shell { visibility: visible !important; }
 }
 
 </style>
 </head>
 <body>
+<div class="login-gate" id="loginGate" hidden>
+  <form class="login-card" id="loginForm" autocomplete="current-password">
+    <img src="assets/brand/logo-matilha.svg" alt="Matilha">
+    <h1>Área da equipe</h1>
+    <p>Digite a senha para avaliar os comentários do Hércules.</p>
+    <div>
+      <label for="loginPassword">Senha</label>
+      <input type="password" id="loginPassword" name="password" required autofocus placeholder="••••••••">
+    </div>
+    <p class="login-error" id="loginError" aria-live="polite"></p>
+    <button type="submit" class="btn btn-primary" id="loginSubmit">Entrar</button>
+  </form>
+</div>
+
+<div class="app-shell">
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand">
       <img src="assets/brand/logo-matilha.svg" alt="Matilha">
       <div class="brand-meta">
         <strong>Hércules · Fase 2</strong>
-        <span>Avaliação de comentários de interface</span>
+        <span id="brandSubtitle">Avaliação de comentários de interface</span>
       </div>
     </div>
     <div class="top-actions">
-      <span class="save-status" id="saveStatus" aria-live="polite"></span>
-      <button type="button" class="btn btn-primary" id="btnExport">Exportar JSON</button>
+      <span class="save-status team-only" id="saveStatus" aria-live="polite"></span>
+      <button type="button" class="btn btn-primary team-only" id="btnExport">Exportar JSON</button>
       <button type="button" class="btn btn-ghost" id="btnPrint">Imprimir</button>
-      <button type="button" class="btn btn-ghost" id="btnClear">Limpar</button>
+      <button type="button" class="btn btn-ghost team-only" id="btnClear">Limpar</button>
+      <button type="button" class="btn btn-ghost team-only" id="btnLogout">Sair</button>
     </div>
   </div>
 </header>
@@ -449,7 +629,7 @@ input.free:disabled { background: var(--matilha-neutral-200); color: var(--matil
 <div class="wrap">
   <header class="hero">
     <h1>Avaliação de impacto</h1>
-    <p>Comentários abertos do fluxo de Auditoria Tradicional. Para cada item, registre se cabe no escopo atual e o impacto em esforço, cronograma e custo.</p>
+    <p id="heroText">Comentários abertos do fluxo de Auditoria Tradicional. Para cada item, registre se cabe no escopo atual e o impacto em esforço, cronograma e custo.</p>
   </header>
 
   <div class="stats">
@@ -1810,6 +1990,7 @@ input.free:disabled { background: var(--matilha-neutral-200); color: var(--matil
     <img src="assets/brand/logo-badge.svg" alt="">
   </footer>
 </div>
+</div><!-- /.app-shell -->
 
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Screenshot ampliada" hidden>
   <div class="lightbox-bar">
@@ -1831,7 +2012,30 @@ input.free:disabled { background: var(--matilha-neutral-200); color: var(--matil
 
 (function() {
   const KEY = 'hercules-avaliacao-v2';
+  // Só /time (visão equipe) pede senha. Raiz e /cliente são sempre públicos.
+  const isEquipe = window.__VIEW__ === 'equipe';
+  const isCliente = !isEquipe;
   const statusEl = document.getElementById('saveStatus');
+  const loginGate = document.getElementById('loginGate');
+  const loginForm = document.getElementById('loginForm');
+  const loginPassword = document.getElementById('loginPassword');
+  const loginError = document.getElementById('loginError');
+  let notesTimer = null;
+  let equipeReady = false;
+
+  if (isCliente) {
+    document.body.classList.add('is-cliente');
+    if (loginGate) loginGate.remove();
+    const sub = document.getElementById('brandSubtitle');
+    const hero = document.getElementById('heroText');
+    if (sub) sub.textContent = 'Visualização das avaliações';
+    if (hero) {
+      hero.textContent = 'Comentários abertos do fluxo de Auditoria Tradicional e a avaliação de impacto registrada pela Matilha. Ao final de cada card, registre considerações ou dúvidas da equipe Hércules.';
+    }
+  } else {
+    document.body.classList.add('is-equipe');
+    if (loginGate) loginGate.hidden = false;
+  }
 
   function collect() {
     const answers = {};
@@ -1850,6 +2054,7 @@ input.free:disabled { background: var(--matilha-neutral-200); color: var(--matil
   }
 
   function applyScope(box) {
+    if (isCliente) return;
     const id = box.dataset.assess;
     const scope = box.querySelector(`input[name="scope-${id}"]:checked`)?.value;
     const fields = box.querySelector('.impact-fields');
@@ -1862,10 +2067,116 @@ input.free:disabled { background: var(--matilha-neutral-200); color: var(--matil
     if (cronoText) cronoText.disabled = crono !== 'sim';
   }
 
+  function normalizeAnswer(v) {
+    const effortMap = { aumenta: 'sim', ok: 'nao' };
+    const cronoMap = { impacta: 'sim' };
+    return {
+      scope: v.scope || '',
+      effort: effortMap[v.effort] || v.effort || '',
+      effortText: (v.effortText || '').trim(),
+      crono: cronoMap[v.crono] || v.crono || '',
+      cronoText: (v.cronoText || '').trim(),
+      custo: (v.custo || '').trim(),
+      consideracoes: (v.consideracoes || '').trim()
+    };
+  }
+
+  function ensureClientNotes(box, clientOnlyText) {
+    const id = box.dataset.assess;
+    let wrap = box.querySelector('.client-consideracoes');
+    if (!wrap) {
+      wrap = document.createElement('div');
+      wrap.className = 'client-consideracoes';
+      wrap.innerHTML =
+        `<label for="consideracoes-${id}">Considerações / Dúvidas da equipe Hércules</label>` +
+        `<textarea id="consideracoes-${id}" name="consideracoes-${id}" rows="3" placeholder="Espaço livre para considerações ou dúvidas — não mistura com a avaliação da Matilha"></textarea>` +
+        `<span class="note-status" aria-live="polite"></span>`;
+      box.appendChild(wrap);
+      const ta = wrap.querySelector('textarea');
+      ta.addEventListener('input', () => {
+        const st = wrap.querySelector('.note-status');
+        if (st) st.textContent = 'Salvando…';
+        scheduleNotesSave();
+      });
+    }
+    // Campo do cliente: só o texto que o próprio cliente escreveu (nunca esforço/crono/motivos do /time)
+    const ta = wrap.querySelector('textarea');
+    if (ta && document.activeElement !== ta) {
+      ta.value = typeof clientOnlyText === 'string' ? clientOnlyText : '';
+    }
+  }
+
+  function renderTeamConsideracoes(box, text) {
+    let wrap = box.querySelector('.team-consideracoes');
+    if (!wrap) {
+      wrap = document.createElement('div');
+      wrap.className = 'team-consideracoes';
+      wrap.innerHTML =
+        '<div class="label">Feedback do cliente — Considerações / Dúvidas</div>' +
+        '<div class="value"></div>';
+      box.appendChild(wrap);
+    }
+    const value = (text || '').trim();
+    const valueEl = wrap.querySelector('.value');
+    valueEl.classList.toggle('is-empty', !value);
+    valueEl.textContent = value || 'Nenhum feedback do cliente ainda.';
+  }
+
+  function renderClientSummary(box, raw) {
+    const v = normalizeAnswer(raw || {});
+    let summary = box.querySelector('.assess-summary');
+    if (!summary) {
+      summary = document.createElement('div');
+      summary.className = 'assess-summary';
+      box.appendChild(summary);
+    }
+
+    const rows = [];
+    const tags = [];
+
+    if (v.scope === 'absorvido') {
+      tags.push('<span class="tag tag-ok">Absorvido</span>');
+    } else if (v.scope === 'nao') {
+      tags.push('<span class="tag tag-warn">Não absorvido</span>');
+      if (v.effort === 'sim') {
+        rows.push({ label: 'Esforço', value: v.effortText || 'Sim' });
+      }
+      if (v.crono === 'sim') {
+        rows.push({ label: 'Cronograma', value: v.cronoText || 'Sim' });
+      }
+      if (v.custo) {
+        rows.push({ label: 'Motivos', value: v.custo });
+      }
+    } else {
+      summary.innerHTML = '<p class="summary-empty">Avaliação ainda não registrada.</p>';
+      // Texto aberto do cliente: independente da avaliação do /time
+      ensureClientNotes(box, v.consideracoes);
+      return;
+    }
+
+    let html = `<div class="summary-tags">${tags.join('')}</div>`;
+    rows.forEach(() => {
+      html += '<div class="summary-row"><div class="label"></div><div class="value"></div></div>';
+    });
+    summary.innerHTML = html;
+    summary.querySelectorAll('.summary-row').forEach((row, i) => {
+      row.querySelector('.label').textContent = rows[i].label;
+      row.querySelector('.value').textContent = rows[i].value;
+    });
+    // Nunca preencher o textarea do cliente com custo/esforço/cronograma do time
+    ensureClientNotes(box, v.consideracoes);
+  }
+
   function applyAnswers(answers) {
     document.querySelectorAll('.assess').forEach(box => {
       const id = box.dataset.assess;
       const v = (answers && answers[id]) || {};
+
+      if (isCliente) {
+        renderClientSummary(box, v);
+        return;
+      }
+
       const scopeVal = v.scope || 'nao';
       const scopeEl = box.querySelector(`input[name="scope-${id}"][value="${scopeVal}"]`);
       if (scopeEl) scopeEl.checked = true;
@@ -1888,20 +2199,30 @@ input.free:disabled { background: var(--matilha-neutral-200); color: var(--matil
       if (ct) ct.value = v.cronoText || '';
       if (cu) cu.value = v.custo || '';
       applyScope(box);
+      renderTeamConsideracoes(box, v.consideracoes || '');
     });
   }
 
   let saveTimer = null;
   async function persist(showStatus = true) {
+    if (!equipeReady) return;
     const answers = collect();
     localStorage.setItem(KEY, JSON.stringify(answers));
     if (showStatus && statusEl) statusEl.textContent = 'Salvando…';
     try {
       const res = await fetch('/api/respostas', {
         method: 'PUT',
+        credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ answers })
       });
+      if (res.status === 401) {
+        equipeReady = false;
+        document.body.classList.remove('is-unlocked');
+        if (loginGate) loginGate.hidden = false;
+        if (showStatus && statusEl) statusEl.textContent = 'Sessão expirada';
+        return;
+      }
       if (!res.ok) throw new Error('falha');
       if (showStatus && statusEl) {
         statusEl.textContent = 'Salvo';
@@ -1913,23 +2234,78 @@ input.free:disabled { background: var(--matilha-neutral-200); color: var(--matil
   }
 
   function scheduleSave() {
+    if (!equipeReady) return;
     clearTimeout(saveTimer);
     saveTimer = setTimeout(() => persist(true), 400);
+  }
+
+  function collectConsideracoes() {
+    const notes = {};
+    document.querySelectorAll('.assess').forEach(box => {
+      const id = box.dataset.assess;
+      const ta = box.querySelector(`textarea[name="consideracoes-${id}"]`);
+      if (ta) notes[id] = ta.value;
+    });
+    return notes;
+  }
+
+  async function persistNotes() {
+    if (!isCliente) return;
+    const consideracoes = collectConsideracoes();
+    try {
+      const res = await fetch('/api/consideracoes', {
+        method: 'PUT',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ consideracoes })
+      });
+      document.querySelectorAll('.client-consideracoes .note-status').forEach(el => {
+        el.textContent = res.ok ? 'Salvo' : 'Erro ao salvar';
+        if (res.ok) setTimeout(() => { if (el.textContent === 'Salvo') el.textContent = ''; }, 1600);
+      });
+    } catch {
+      document.querySelectorAll('.client-consideracoes .note-status').forEach(el => {
+        el.textContent = 'Erro ao salvar';
+      });
+    }
+  }
+
+  function scheduleNotesSave() {
+    clearTimeout(notesTimer);
+    notesTimer = setTimeout(persistNotes, 500);
   }
 
   async function load() {
     let answers = {};
     try {
-      const res = await fetch('/api/respostas');
+      const res = await fetch('/api/respostas', { credentials: 'same-origin' });
       if (res.ok) {
         const data = await res.json();
         answers = data.answers || {};
       }
     } catch {}
-    if (!answers || !Object.keys(answers).length) {
+    if (isEquipe && (!answers || !Object.keys(answers).length)) {
       try { answers = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch {}
     }
     applyAnswers(answers);
+  }
+
+  async function checkAuth() {
+    try {
+      const res = await fetch('/api/auth/status', { credentials: 'same-origin' });
+      if (res.ok) {
+        const data = await res.json();
+        return Boolean(data.ok);
+      }
+    } catch {}
+    return false;
+  }
+
+  async function unlockEquipe() {
+    equipeReady = true;
+    document.body.classList.add('is-unlocked');
+    if (loginGate) loginGate.hidden = true;
+    await load();
   }
 
   // Tabs
@@ -1938,42 +2314,113 @@ input.free:disabled { background: var(--matilha-neutral-200); color: var(--matil
     bruno: document.getElementById('panel-bruno'),
     nathalia: document.getElementById('panel-nathalia')
   };
-  function setTab(name) {
+  function setTab(name, updateUrl = true) {
     tabs.forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
     Object.entries(panels).forEach(([k, el]) => { el.hidden = k !== name; });
-    history.replaceState(null, '', name === 'bruno' ? '#bruno' : '#nathalia');
+    if (!updateUrl) return;
+    // Bruno = URL limpa (sem hash). Nathalia = #nathalia
+    const path = location.pathname + location.search;
+    const next = name === 'nathalia' ? path + '#nathalia' : path;
+    if (location.pathname + location.search + location.hash !== next) {
+      history.replaceState(null, '', next);
+    }
   }
   tabs.forEach(t => t.addEventListener('click', () => setTab(t.dataset.tab)));
-  setTab(location.hash === '#nathalia' ? 'nathalia' : 'bruno');
+  // #bruno (legado) também abre Bruno, mas a URL é limpa
+  const initialTab = location.hash === '#nathalia' ? 'nathalia' : 'bruno';
+  setTab(initialTab, true);
 
-  document.querySelectorAll('.assess').forEach(box => {
-    box.addEventListener('change', () => { applyScope(box); scheduleSave(); });
-    box.addEventListener('input', scheduleSave);
-  });
+  if (isEquipe) {
+    document.querySelectorAll('.assess').forEach(box => {
+      box.addEventListener('change', () => { applyScope(box); scheduleSave(); });
+      box.addEventListener('input', scheduleSave);
+    });
 
-  document.getElementById('btnExport').onclick = () => {
-    const answers = collect();
-    const blob = new Blob([JSON.stringify({ updatedAt: new Date().toISOString(), answers }, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'hercules-avaliacao-respostas.json';
-    a.click();
-  };
-  document.getElementById('btnPrint').onclick = () => window.print();
-  document.getElementById('btnClear').onclick = async () => {
-    if (!confirm('Limpar todas as respostas salvas?')) return;
-    localStorage.removeItem(KEY);
-    try {
-      await fetch('/api/respostas', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answers: {} })
+    const btnExport = document.getElementById('btnExport');
+    const btnClear = document.getElementById('btnClear');
+    const btnLogout = document.getElementById('btnLogout');
+    if (btnExport) {
+      btnExport.onclick = () => {
+        const answers = collect();
+        const blob = new Blob([JSON.stringify({ updatedAt: new Date().toISOString(), answers }, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'hercules-avaliacao-respostas.json';
+        a.click();
+      };
+    }
+    if (btnClear) {
+      btnClear.onclick = async () => {
+        if (!confirm('Limpar todas as respostas salvas?')) return;
+        localStorage.removeItem(KEY);
+        try {
+          await fetch('/api/respostas', {
+            method: 'PUT',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ answers: {} })
+          });
+        } catch {}
+        location.reload();
+      };
+    }
+    if (btnLogout) {
+      btnLogout.onclick = async () => {
+        try {
+          await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' });
+        } catch {}
+        location.reload();
+      };
+    }
+    if (loginForm) {
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (loginError) loginError.textContent = '';
+        const password = loginPassword ? loginPassword.value : '';
+        try {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password })
+          });
+          if (!res.ok) {
+            if (loginError) loginError.textContent = 'Senha incorreta';
+            return;
+          }
+          await unlockEquipe();
+        } catch {
+          if (loginError) loginError.textContent = 'Não foi possível entrar. Tente de novo.';
+        }
       });
-    } catch {}
-    location.reload();
-  };
+    }
+  }
 
-  load();
+  document.getElementById('btnPrint').onclick = () => window.print();
+
+  if (isCliente) {
+    load();
+  } else {
+    checkAuth().then(ok => {
+      if (ok) unlockEquipe();
+      else if (loginPassword) loginPassword.focus();
+    });
+  }
+
+  // Numeração contínua dos comentários (#1, #2, …)
+  (function numberComments() {
+    let n = 0;
+    document.querySelectorAll('#panel-bruno .comment-card, #panel-nathalia .comment-card').forEach(card => {
+      const head = card.querySelector('.comment-head');
+      const badge = head && head.querySelector('.badge');
+      if (!head || !badge || head.querySelector('.comment-num')) return;
+      n += 1;
+      const num = document.createElement('span');
+      num.className = 'comment-num';
+      num.textContent = '#' + n;
+      head.insertBefore(num, badge);
+    });
+  })();
 
   // Lightbox
   const lb = document.getElementById('lightbox');

@@ -1,4 +1,310 @@
 {
-  "updatedAt": null,
-  "answers": {}
+  "updatedAt": "2026-07-16T13:56:25.683Z",
+  "answers": {
+    "1834974955": {
+      "scope": "nao",
+      "effort": "sim",
+      "effortText": "asdq",
+      "crono": "sim",
+      "cronoText": "asdqw",
+      "custo": "outro",
+      "consideracoes": "duvida do cliente"
+    },
+    "1834977781": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1834987080": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1834990690": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835004625": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835013269": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835017495": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835106842": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835117485": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835118067": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835126012": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835137881": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835154123": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835187840": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835523033": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835546963": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835557957": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835565599": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835568615": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835742485": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835743238": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835746574": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835747369": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835753416": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835756605": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835757330": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1835758489": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1841305741": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1841306615": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1841307402": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1841309656": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1841310209": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1841312603": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1841317579": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1841323200": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1841323751": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1841326368": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    },
+    "1842401170": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": ""
+    }
+  }
 }
