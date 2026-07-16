@@ -104,8 +104,63 @@ body::before {
 }
 .btn-ghost:hover { background: var(--matilha-neutral-200); }
 .save-status {
-  font-family: var(--font-ui); font-size: .78rem; color: var(--muted);
-  min-width: 7ch;
+  font-family: var(--font-ui);
+  font-size: .8rem;
+  font-weight: 700;
+  min-width: 0;
+}
+.save-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-ui);
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  border-radius: 999px;
+  padding: 5px 10px;
+  line-height: 1.2;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity .18s ease, transform .18s ease, background .15s ease;
+  pointer-events: none;
+}
+.save-pill.is-saving,
+.save-pill.is-saved,
+.save-pill.is-error,
+.save-pill.is-local,
+.save-pill.is-expired {
+  opacity: 1;
+  transform: none;
+}
+.save-pill.is-saving {
+  background: #eef3ff;
+  color: var(--matilha-primary-400);
+  border-color: #c9d8f8;
+}
+.save-pill.is-saved {
+  background: #e6f7ed;
+  color: #17663a;
+  border-color: #a8dfbf;
+}
+.save-pill.is-error,
+.save-pill.is-expired {
+  background: #fdecec;
+  color: #b42318;
+  border-color: #f3c1c1;
+}
+.save-pill.is-local {
+  background: #fff7e6;
+  color: #8a4b00;
+  border-color: #f0d2a0;
+}
+.assess-save-row {
+  display: flex;
+  justify-content: flex-end;
+  margin: -4px 0 4px;
+  min-height: 28px;
 }
 
 .wrap { max-width: 960px; margin: 0 auto; padding: 28px 20px 80px; }
@@ -477,6 +532,13 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
   flex-direction: column;
   gap: 8px;
 }
+.client-consideracoes-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 .client-consideracoes label {
   font-family: var(--font-ui);
   font-size: .85rem;
@@ -488,11 +550,9 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
   resize: vertical;
   min-height: 72px;
 }
-.client-consideracoes .note-status {
-  font-family: var(--font-ui);
-  font-size: .78rem;
-  color: var(--muted);
-  min-height: 1.1em;
+.client-consideracoes.is-just-saved textarea {
+  border-color: #7dcca0;
+  box-shadow: 0 0 0 3px rgba(31, 107, 58, .12);
 }
 .team-consideracoes {
   border-top: 1px solid var(--line);
@@ -617,7 +677,7 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
       </div>
     </div>
     <div class="top-actions">
-      <span class="save-status team-only" id="saveStatus" aria-live="polite"></span>
+      <span class="save-status save-pill team-only" id="saveStatus" aria-live="polite"></span>
       <button type="button" class="btn btn-primary team-only" id="btnExport">Exportar JSON</button>
       <button type="button" class="btn btn-ghost" id="btnPrint">Imprimir</button>
       <button type="button" class="btn btn-ghost team-only" id="btnClear">Limpar</button>
@@ -2081,6 +2141,46 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
     };
   }
 
+  const savePillTimers = new WeakMap();
+
+  function setSavePill(el, state, opts = {}) {
+    if (!el) return;
+    const labels = {
+      saving: 'Salvando…',
+      saved: '✓ Salvo',
+      error: 'Erro ao salvar',
+      local: 'Salvo neste navegador',
+      expired: 'Sessão expirada'
+    };
+    el.className = el.classList.contains('save-status')
+      ? `save-status save-pill team-only${state ? ' is-' + state : ''}`
+      : `save-pill${state ? ' is-' + state : ''}`;
+    el.textContent = labels[state] || '';
+    el.hidden = !state;
+    const prev = savePillTimers.get(el);
+    if (prev) clearTimeout(prev);
+    if (state === 'saved' || state === 'local') {
+      const ms = opts.holdMs != null ? opts.holdMs : 4000;
+      const t = setTimeout(() => {
+        if (el.textContent === labels[state]) setSavePill(el, '');
+      }, ms);
+      savePillTimers.set(el, t);
+    }
+  }
+
+  function ensureAssessSavePill(box) {
+    let row = box.querySelector('.assess-save-row');
+    if (!row) {
+      row = document.createElement('div');
+      row.className = 'assess-save-row';
+      row.innerHTML = '<span class="save-pill" aria-live="polite"></span>';
+      const title = box.querySelector('.assess-title');
+      if (title && title.nextSibling) box.insertBefore(row, title.nextSibling);
+      else box.insertBefore(row, box.firstChild);
+    }
+    return row.querySelector('.save-pill');
+  }
+
   function ensureClientNotes(box, clientOnlyText) {
     const id = box.dataset.assess;
     let wrap = box.querySelector('.client-consideracoes');
@@ -2088,15 +2188,17 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
       wrap = document.createElement('div');
       wrap.className = 'client-consideracoes';
       wrap.innerHTML =
-        `<label for="consideracoes-${id}">Considerações / Dúvidas da equipe Hércules</label>` +
-        `<textarea id="consideracoes-${id}" name="consideracoes-${id}" rows="3" placeholder="Espaço livre para considerações ou dúvidas — não mistura com a avaliação da Matilha"></textarea>` +
-        `<span class="note-status" aria-live="polite"></span>`;
+        `<div class="client-consideracoes-head">` +
+          `<label for="consideracoes-${id}">Considerações / Dúvidas da equipe Hércules</label>` +
+          `<span class="save-pill" data-note-status aria-live="polite"></span>` +
+        `</div>` +
+        `<textarea id="consideracoes-${id}" name="consideracoes-${id}" rows="3" placeholder="Espaço livre para considerações ou dúvidas — não mistura com a avaliação da Matilha"></textarea>`;
       box.appendChild(wrap);
       const ta = wrap.querySelector('textarea');
       ta.addEventListener('input', () => {
-        const st = wrap.querySelector('.note-status');
-        if (st) st.textContent = 'Salvando…';
-        scheduleNotesSave();
+        wrap.classList.remove('is-just-saved');
+        setSavePill(wrap.querySelector('[data-note-status]'), 'saving');
+        scheduleNotesSave(wrap);
       });
     }
     // Campo do cliente: só o texto que o próprio cliente escreveu (nunca esforço/crono/motivos do /time)
@@ -2177,9 +2279,13 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
         return;
       }
 
+      // Padrão: Não absorvido (campos de impacto abertos)
       const scopeVal = v.scope || 'nao';
-      const scopeEl = box.querySelector(`input[name="scope-${id}"][value="${scopeVal}"]`);
-      if (scopeEl) scopeEl.checked = true;
+      box.querySelectorAll(`input[name="scope-${id}"]`).forEach(el => {
+        el.checked = el.value === scopeVal;
+      });
+      box.querySelectorAll(`input[name="effort-${id}"]`).forEach(el => { el.checked = false; });
+      box.querySelectorAll(`input[name="crono-${id}"]`).forEach(el => { el.checked = false; });
       if (v.effort) {
         const effortMap = { aumenta: 'sim', ok: 'nao' };
         const effortVal = effortMap[v.effort] || v.effort;
@@ -2204,11 +2310,17 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
   }
 
   let saveTimer = null;
+  let lastEditedAssess = null;
+
   async function persist(showStatus = true) {
     if (!equipeReady) return;
     const answers = collect();
     localStorage.setItem(KEY, JSON.stringify(answers));
-    if (showStatus && statusEl) statusEl.textContent = 'Salvando…';
+    const cardPill = lastEditedAssess ? ensureAssessSavePill(lastEditedAssess) : null;
+    if (showStatus) {
+      setSavePill(statusEl, 'saving');
+      setSavePill(cardPill, 'saving');
+    }
     try {
       const res = await fetch('/api/respostas', {
         method: 'PUT',
@@ -2220,21 +2332,25 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
         equipeReady = false;
         document.body.classList.remove('is-unlocked');
         if (loginGate) loginGate.hidden = false;
-        if (showStatus && statusEl) statusEl.textContent = 'Sessão expirada';
+        if (showStatus) setSavePill(statusEl, 'expired');
         return;
       }
       if (!res.ok) throw new Error('falha');
-      if (showStatus && statusEl) {
-        statusEl.textContent = 'Salvo';
-        setTimeout(() => { if (statusEl.textContent === 'Salvo') statusEl.textContent = ''; }, 1800);
+      if (showStatus) {
+        setSavePill(statusEl, 'saved');
+        setSavePill(cardPill, 'saved');
       }
     } catch {
-      if (showStatus && statusEl) statusEl.textContent = 'Salvo neste navegador';
+      if (showStatus) {
+        setSavePill(statusEl, 'local');
+        setSavePill(cardPill, 'local');
+      }
     }
   }
 
-  function scheduleSave() {
+  function scheduleSave(box) {
     if (!equipeReady) return;
+    if (box) lastEditedAssess = box;
     clearTimeout(saveTimer);
     saveTimer = setTimeout(() => persist(true), 400);
   }
@@ -2249,9 +2365,13 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
     return notes;
   }
 
-  async function persistNotes() {
+  async function persistNotes(activeWrap) {
     if (!isCliente) return;
     const consideracoes = collectConsideracoes();
+    const targets = activeWrap
+      ? [activeWrap]
+      : Array.from(document.querySelectorAll('.client-consideracoes'));
+    targets.forEach(wrap => setSavePill(wrap.querySelector('[data-note-status]'), 'saving'));
     try {
       const res = await fetch('/api/consideracoes', {
         method: 'PUT',
@@ -2259,32 +2379,41 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ consideracoes })
       });
-      document.querySelectorAll('.client-consideracoes .note-status').forEach(el => {
-        el.textContent = res.ok ? 'Salvo' : 'Erro ao salvar';
-        if (res.ok) setTimeout(() => { if (el.textContent === 'Salvo') el.textContent = ''; }, 1600);
+      targets.forEach(wrap => {
+        const pill = wrap.querySelector('[data-note-status]');
+        if (res.ok) {
+          setSavePill(pill, 'saved');
+          wrap.classList.add('is-just-saved');
+          setTimeout(() => wrap.classList.remove('is-just-saved'), 1600);
+        } else {
+          setSavePill(pill, 'error');
+        }
       });
     } catch {
-      document.querySelectorAll('.client-consideracoes .note-status').forEach(el => {
-        el.textContent = 'Erro ao salvar';
-      });
+      targets.forEach(wrap => setSavePill(wrap.querySelector('[data-note-status]'), 'error'));
     }
   }
 
-  function scheduleNotesSave() {
+  function scheduleNotesSave(activeWrap) {
     clearTimeout(notesTimer);
-    notesTimer = setTimeout(persistNotes, 500);
+    notesTimer = setTimeout(() => persistNotes(activeWrap), 500);
   }
 
   async function load() {
     let answers = {};
+    let fromServer = false;
     try {
       const res = await fetch('/api/respostas', { credentials: 'same-origin' });
       if (res.ok) {
         const data = await res.json();
         answers = data.answers || {};
+        fromServer = true;
       }
     } catch {}
-    if (isEquipe && (!answers || !Object.keys(answers).length)) {
+    // Servidor vazio = respostas limpas (não reaproveitar cache local antigo)
+    if (fromServer) {
+      if (!Object.keys(answers).length) localStorage.removeItem(KEY);
+    } else if (isEquipe) {
       try { answers = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch {}
     }
     applyAnswers(answers);
@@ -2332,8 +2461,8 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
 
   if (isEquipe) {
     document.querySelectorAll('.assess').forEach(box => {
-      box.addEventListener('change', () => { applyScope(box); scheduleSave(); });
-      box.addEventListener('input', scheduleSave);
+      box.addEventListener('change', () => { applyScope(box); scheduleSave(box); });
+      box.addEventListener('input', () => scheduleSave(box));
     });
 
     const btnExport = document.getElementById('btnExport');
