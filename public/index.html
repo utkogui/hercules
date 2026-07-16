@@ -187,22 +187,24 @@ body::before {
 .panel[hidden] { display: none !important; }
 
 .page {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 18px 18px 8px;
-  margin-bottom: 16px;
-  box-shadow: var(--matilha-shadow-100);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 40px;
+  box-shadow: none;
 }
 .page > h2 {
-  margin: 0 0 14px;
+  margin: 0 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--matilha-neutral-900);
   font-family: var(--font-ui);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   letter-spacing: -.02em;
 }
 .persona-title {
-  margin: 0 0 14px;
-  padding: 10px 12px;
+  margin: 0 0 20px;
+  padding: 12px 14px;
   border-radius: var(--matilha-radius-md);
   font-family: var(--font-ui);
   font-size: .95rem;
@@ -219,23 +221,55 @@ body::before {
 }
 
 .frame-card {
+  position: relative;
   border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 14px;
-  margin: 0 0 18px;
+  border-radius: 14px;
+  padding: 18px 18px 20px;
+  margin: 0 0 32px;
   background: #fff;
+  box-shadow: var(--matilha-shadow-200);
 }
-#panel-bruno .frame-card { border-left: 3px solid var(--bruno); }
-#panel-nathalia .frame-card { border-left: 3px solid var(--matilha-brand-yellow); }
+.frame-card + .frame-card {
+  margin-top: 40px;
+}
+.frame-card:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -22px;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--matilha-neutral-400);
+  box-shadow: -18px 0 0 var(--matilha-neutral-300), 18px 0 0 var(--matilha-neutral-300);
+}
+.frame-card:last-child {
+  margin-bottom: 8px;
+}
+
+#panel-bruno .frame-card {
+  border-left: 4px solid var(--bruno);
+  background: linear-gradient(180deg, #f7f9fd 0%, #ffffff 48px);
+}
+#panel-nathalia .frame-card {
+  border-left: 4px solid var(--matilha-brand-yellow);
+  background: linear-gradient(180deg, #fffdf3 0%, #ffffff 48px);
+}
 
 .frame-head {
   display: flex; justify-content: space-between; gap: 12px;
-  align-items: flex-start; margin-bottom: 10px;
+  align-items: flex-start;
+  margin: -18px -18px 14px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255,255,255,.72);
+  border-radius: 14px 14px 0 0;
 }
 .frame-head h4 {
   margin: 0 0 4px;
   font-family: var(--font-ui);
-  font-size: 1.02rem;
+  font-size: 1.05rem;
   letter-spacing: -.01em;
 }
 .hint { margin: 0; color: var(--muted); font-size: .88rem; }
@@ -244,7 +278,7 @@ body::before {
   font-family: var(--font-ui);
   color: var(--ink);
   border: 1px solid var(--line);
-  background: var(--matilha-neutral-200);
+  background: var(--matilha-neutral-100);
   border-radius: var(--matilha-radius-pill);
   padding: 8px 12px; white-space: nowrap;
 }
@@ -254,12 +288,31 @@ body::before {
   width: 100%; border-radius: 8px; border: 1px solid var(--line);
   display: block; margin-bottom: 12px; background: #111;
 }
-.comments-under-frame { display: flex; flex-direction: column; gap: 12px; }
+.comments-under-frame {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--matilha-neutral-300);
+}
 .comment-card {
   border: 1px solid var(--line);
   border-radius: 10px;
-  padding: 12px 14px;
-  background: #fff;
+  padding: 14px 16px;
+  background: var(--matilha-neutral-100);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.6);
+}
+#panel-bruno .comment-card {
+  border-color: #d5e0f4;
+  background: #fbfcff;
+}
+#panel-nathalia .comment-card {
+  border-color: #efe3a8;
+  background: #fffcf0;
+}
+.comment-card + .comment-card {
+  border-top-width: 3px;
 }
 .comment-head { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
 .badge {
