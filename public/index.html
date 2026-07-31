@@ -218,6 +218,229 @@ body::before {
   width: fit-content;
   max-width: 100%;
 }
+
+.project-scope-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 0 0 14px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #e6f7ed;
+  border: 1px solid #a8dfbf;
+  color: #17663a;
+  font-family: var(--font-ui);
+  font-size: .95rem;
+  font-weight: 600;
+}
+.project-scope-item strong {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+.project-scope-item.warn {
+  color: #8a4b00;
+}
+.project-scope-item.warn strong {
+  color: #8a4b00;
+}
+.project-scope-sep {
+  opacity: .45;
+  font-weight: 500;
+}
+.project-scope-total {
+  margin-left: auto;
+  font-size: .82rem;
+  font-weight: 500;
+  color: #2f6b48;
+  opacity: .9;
+}
+.project-cost-box {
+  width: 100%;
+  margin-top: 4px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(255,255,255,.72);
+  border: 1px solid #b7dfc4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 16px;
+}
+.project-cost-box .pc-label {
+  font-size: .78rem;
+  font-weight: 600;
+  color: #2f6b48;
+  width: 100%;
+}
+.project-cost-box .pc-value {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--matilha-primary-400);
+}
+.project-cost-box .pc-meta {
+  font-size: .82rem;
+  font-weight: 600;
+  color: #8a4b00;
+}
+.banner-authors {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 6px;
+}
+.banner-author {
+  appearance: none;
+  border: 1px solid #b7dfc4;
+  background: rgba(255,255,255,.7);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: var(--font-ui);
+  color: #17663a;
+  text-align: left;
+  transition: background .12s ease, border-color .12s ease, box-shadow .12s ease;
+}
+.banner-author strong {
+  font-size: .95rem;
+  font-weight: 700;
+}
+.banner-author .count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.8rem;
+  height: 1.8rem;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: .8rem;
+  font-weight: 700;
+  background: rgba(0,0,0,.06);
+}
+.banner-author:hover {
+  background: #fff;
+}
+.banner-author[aria-selected="true"] {
+  background: #fff;
+  border-color: var(--matilha-primary-300);
+  box-shadow: 0 0 0 3px rgba(32, 75, 172, .12);
+  color: var(--matilha-primary-400);
+}
+.banner-author[data-tab="nathalia"][aria-selected="true"] {
+  border-color: #e0b84a;
+  box-shadow: 0 0 0 3px rgba(251, 217, 81, .35);
+  color: #8a4b00;
+}
+@media (max-width: 720px) {
+  .banner-authors { grid-template-columns: 1fr; }
+}
+
+.scope-accordions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.scope-filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.scope-filter-btn {
+  appearance: none;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 16px 18px;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-ui);
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  box-shadow: var(--matilha-shadow-100);
+}
+.scope-filter-btn:hover {
+  transform: translateY(-1px);
+}
+.scope-filter-btn .sf-label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.scope-filter-btn .sf-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: .85rem;
+  font-weight: 700;
+  background: rgba(0,0,0,.08);
+}
+.scope-filter-btn .sf-hint {
+  display: block;
+  margin-top: 8px;
+  font-size: .78rem;
+  font-weight: 500;
+  opacity: .75;
+}
+.scope-filter-btn[data-filter="absorvido"] {
+  background: #e6f7ed;
+  color: #17663a;
+  border-color: #a8dfbf;
+}
+.scope-filter-btn[data-filter="nao"] {
+  background: #fff4e0;
+  color: #8a4b00;
+  border-color: #f0d2a0;
+}
+.scope-filter-btn[aria-pressed="true"] {
+  box-shadow: 0 0 0 3px rgba(32, 75, 172, .18), var(--matilha-shadow-200);
+  border-color: var(--matilha-primary-300);
+}
+.scope-filter-btn[data-filter="absorvido"][aria-pressed="true"] {
+  background: #d4f0df;
+}
+.scope-filter-btn[data-filter="nao"][aria-pressed="true"] {
+  background: #ffe8b8;
+}
+.scope-view-title {
+  margin: 4px 0 0;
+  font-family: var(--font-ui);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.scope-view-title[data-active="absorvido"] { color: #17663a; }
+.scope-view-title[data-active="nao"] { color: #8a4b00; }
+.scope-acc-body {
+  padding: 4px 0 8px;
+  min-height: 80px;
+}
+.scope-acc-body[hidden] { display: none !important; }
+.scope-acc-body:empty::before {
+  content: "Nenhum item neste grupo.";
+  display: block;
+  padding: 18px 14px;
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+  font-family: var(--font-ui);
+  font-size: .9rem;
+  color: var(--muted);
+  background: #fafafa;
+}
+.scope-acc-body .page { margin: 0; }
+.scope-acc-body .persona { margin: 0; }
+@media (max-width: 720px) {
+  .scope-filters { grid-template-columns: 1fr; }
+  .project-scope-total { margin-left: 0; width: 100%; }
+}
 .tab {
   appearance: none; border: 0; cursor: pointer;
   font-family: var(--font-ui); font-weight: 600; font-size: .9rem;
@@ -405,7 +628,78 @@ input.free, textarea {
   padding: 9px 11px; font: inherit; background: #fff;
 }
 input.free:disabled { background: var(--matilha-neutral-200); color: var(--matilha-neutral-500); }
-.impact-fields[hidden] { display: none !important; }
+.choices-diff {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip-diff {
+  min-width: 2.4rem;
+  justify-content: center;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.q-dificuldade {
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+}
+.q-dificuldade > label {
+  display: block;
+  margin-bottom: 8px;
+}
+.diff-estimate {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f4f7fb;
+  border: 1px solid #d7e2f2;
+  font-family: var(--font-ui);
+  font-size: .88rem;
+  color: var(--matilha-neutral-800);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  align-items: baseline;
+}
+.diff-estimate[hidden] { display: none !important; }
+.diff-estimate .de-hours { font-weight: 600; }
+.diff-estimate .de-value {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--matilha-primary-400);
+}
+.diff-estimate .de-meta {
+  width: 100%;
+  font-size: .78rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+.scope-subtotal {
+  margin: 8px 0 18px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: #fff4e0;
+  border: 1px solid #f0d2a0;
+  font-family: var(--font-ui);
+  color: #8a4b00;
+}
+.scope-subtotal[hidden] { display: none !important; }
+.scope-subtotal .st-label {
+  font-size: .82rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.scope-subtotal .st-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+.scope-subtotal .st-meta {
+  margin-top: 4px;
+  font-size: .78rem;
+  opacity: .85;
+}
 
 .footer {
   margin-top: 28px; padding-top: 18px;
@@ -643,10 +937,16 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
 }
 
 @media print {
-  .topbar, .tabs, .lightbox, .login-gate, .frame-shot::after { display: none !important; }
+  .topbar, .lightbox, .login-gate, .frame-shot::after { display: none !important; }
   .panel[hidden] { display: block !important; }
   .frame-card { break-inside: avoid; }
   body.is-equipe:not(.is-unlocked) .app-shell { visibility: visible !important; }
+  .scope-acc { break-inside: avoid; }
+  .scope-acc > summary { display: flex !important; }
+  .scope-acc-body { display: block !important; }
+  .scope-acc-body[hidden] { display: block !important; }
+  .scope-filters { display: none !important; }
+  .scope-view-title { display: block !important; }
 }
 
 </style>
@@ -698,13 +998,32 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
     <div class="stat"><strong>32</strong><span>Frames revisados</span></div>
   </div>
 
-  <div class="tabs" role="tablist" aria-label="Autores">
-    <button type="button" class="tab" role="tab" data-tab="bruno" aria-selected="true" aria-controls="panel-bruno" id="tab-bruno">
-      Bruno de Paula <span class="count">15</span>
-    </button>
-    <button type="button" class="tab" role="tab" data-tab="nathalia" aria-selected="false" aria-controls="panel-nathalia" id="tab-nathalia">
-      Nathalia Bertoldo <span class="count">23</span>
-    </button>
+  <div class="project-scope-banner" id="projectScopeBanner" aria-live="polite">
+    <span class="project-scope-item ok">
+      <strong id="countAbsorvidos">0</strong> absorvidos
+    </span>
+    <span class="project-scope-sep" aria-hidden="true">·</span>
+    <span class="project-scope-item warn">
+      <strong id="countNaoAbsorvidos">0</strong> não absorvidos
+    </span>
+    <span class="project-scope-total">no projeto</span>
+
+    <div class="banner-authors" role="tablist" aria-label="Autores">
+      <button type="button" class="banner-author" role="tab" data-tab="bruno" aria-selected="true" aria-controls="panel-bruno" id="tab-bruno">
+        <strong>Bruno de Paula</strong>
+        <span class="count">15</span>
+      </button>
+      <button type="button" class="banner-author" role="tab" data-tab="nathalia" aria-selected="false" aria-controls="panel-nathalia" id="tab-nathalia">
+        <strong>Nathalia Bertoldo</strong>
+        <span class="count">23</span>
+      </button>
+    </div>
+
+    <div class="project-cost-box" id="projectCostBox">
+      <span class="pc-label">Total estimado dos não absorvidos</span>
+      <strong class="pc-value" id="projectCostValue">R$&nbsp;0,00</strong>
+      <span class="pc-meta" id="projectCostMeta">0h · selecione a dificuldade nos itens</span>
+    </div>
   </div>
 
   <div class="panel" id="panel-bruno" role="tabpanel" aria-labelledby="tab-bruno">
@@ -2097,6 +2416,168 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
     if (loginGate) loginGate.hidden = false;
   }
 
+  const HOUR_RATE = 177;
+  // Dificuldade 1 = 4h, 10 = 40h → linear: horas = dificuldade × 4
+  let answersCache = {};
+
+  function hoursFromDifficulty(diff) {
+    const n = Number(diff);
+    if (!Number.isFinite(n) || n < 1 || n > 10) return null;
+    return n * 4;
+  }
+
+  function formatBRL(value) {
+    return Number(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  function itemCostFromDifficulty(diff) {
+    const hours = hoursFromDifficulty(diff);
+    if (hours == null) return null;
+    return { hours, value: hours * HOUR_RATE };
+  }
+
+  function getDifficulty(box) {
+    if (!box) return '';
+    const id = box.dataset.assess;
+    const checked = box.querySelector(`input[name="dificuldade-${id}"]:checked`)?.value;
+    if (checked) return String(checked);
+    if (box.dataset.dificuldade) return String(box.dataset.dificuldade);
+    const cached = answersCache[id] && answersCache[id].dificuldade;
+    return cached != null && cached !== '' ? String(cached) : '';
+  }
+
+  function ensureDifficultyField(box) {
+    if (isCliente || !box) return null;
+    const id = box.dataset.assess;
+    let q = box.querySelector('.q-dificuldade');
+    if (!q) {
+      q = document.createElement('div');
+      q.className = 'q q-dificuldade';
+      let radios = '';
+      for (let i = 1; i <= 10; i += 1) {
+        radios += `<label class="chip chip-diff"><input type="radio" name="dificuldade-${id}" value="${i}"> ${i}</label>`;
+      }
+      q.innerHTML =
+        `<label>Dificuldade</label>` +
+        `<div class="choices choices-diff">${radios}</div>` +
+        `<div class="diff-estimate" data-diff-estimate hidden></div>`;
+      const impact = box.querySelector('.impact-fields');
+      if (impact) box.insertBefore(q, impact);
+      else box.appendChild(q);
+    } else if (!q.querySelector('[data-diff-estimate]')) {
+      const est = document.createElement('div');
+      est.className = 'diff-estimate';
+      est.setAttribute('data-diff-estimate', '');
+      est.hidden = true;
+      q.appendChild(est);
+    }
+    updateDifficultyEstimate(box);
+    return q;
+  }
+
+  function updateDifficultyEstimate(box) {
+    if (!box || isCliente) return;
+    const id = box.dataset.assess;
+    const est = box.querySelector('[data-diff-estimate]');
+    if (!est) return;
+    const scope = readScope(box);
+    const diff = getDifficulty(box);
+    const cost = itemCostFromDifficulty(diff);
+
+    if (scope !== 'nao') {
+      est.hidden = true;
+      est.innerHTML = '';
+      return;
+    }
+    if (!cost) {
+      est.hidden = false;
+      est.innerHTML =
+        `<span class="de-meta">Selecione a dificuldade (1 = 4h · 10 = 40h) · hora Matilha ${formatBRL(HOUR_RATE)}</span>`;
+      return;
+    }
+    est.hidden = false;
+    est.innerHTML =
+      `<span class="de-hours">${cost.hours} horas</span>` +
+      `<span class="de-value">${formatBRL(cost.value)}</span>` +
+      `<span class="de-meta">Dificuldade ${diff}/10 · ${formatBRL(HOUR_RATE)}/h · item não absorvido</span>`;
+  }
+
+  function sumNaoAbsorvidoCosts(root) {
+    let hours = 0;
+    let value = 0;
+    let counted = 0;
+    let missing = 0;
+    const scope = root || document;
+    // Prefere cards no grupo "não absorvidos"; se vazio, cai nos .assess do escopo
+    let boxes = Array.from(scope.querySelectorAll('[data-scope-body="nao"] .assess'));
+    if (!boxes.length) boxes = Array.from(scope.querySelectorAll('.assess'));
+    boxes.forEach(box => {
+      if (readScope(box) !== 'nao') return;
+      const cost = itemCostFromDifficulty(getDifficulty(box));
+      if (cost) {
+        hours += cost.hours;
+        value += cost.value;
+        counted += 1;
+      } else {
+        missing += 1;
+      }
+    });
+    return { hours, value, counted, missing };
+  }
+
+  function updateProjectCostTotal() {
+    // Total geral: todos os não absorvidos do projeto (Bruno + Nathalia)
+    const all = { hours: 0, value: 0, counted: 0, missing: 0 };
+    document.querySelectorAll('.assess').forEach(box => {
+      if (readScope(box) !== 'nao') return;
+      const cost = itemCostFromDifficulty(getDifficulty(box));
+      if (cost) {
+        all.hours += cost.hours;
+        all.value += cost.value;
+        all.counted += 1;
+      } else {
+        all.missing += 1;
+      }
+    });
+    const valueEl = document.getElementById('projectCostValue');
+    const metaEl = document.getElementById('projectCostMeta');
+    if (valueEl) valueEl.textContent = formatBRL(all.value);
+    if (metaEl) {
+      metaEl.textContent = `${all.hours}h · ${all.counted} itens com dificuldade` +
+        (all.missing ? ` · ${all.missing} sem dificuldade` : '') +
+        ` · ${formatBRL(HOUR_RATE)}/h`;
+    }
+  }
+
+  function updateNaoAbsorvidoSubtotals() {
+    document.querySelectorAll('.scope-accordions').forEach(wrap => {
+      let sub = wrap.querySelector('[data-scope-subtotal]');
+      if (!sub) {
+        sub = document.createElement('div');
+        sub.className = 'scope-subtotal';
+        sub.setAttribute('data-scope-subtotal', '');
+        const naoBody = wrap.querySelector('[data-scope-body="nao"]');
+        if (naoBody) naoBody.before(sub);
+        else wrap.appendChild(sub);
+      }
+
+      const tot = sumNaoAbsorvidoCosts(wrap);
+      const active = wrap.dataset.activeFilter || 'nao';
+      if (active !== 'nao') {
+        sub.hidden = true;
+        return;
+      }
+      sub.hidden = false;
+      sub.innerHTML =
+        `<div class="st-label">Total dos itens não absorvidos deste autor</div>` +
+        `<div class="st-value">${formatBRL(tot.value)}</div>` +
+        `<div class="st-meta">${tot.hours}h estimadas · ${tot.counted} com dificuldade` +
+          (tot.missing ? ` · ${tot.missing} sem dificuldade` : '') +
+          ` · ${formatBRL(HOUR_RATE)}/h</div>`;
+    });
+    updateProjectCostTotal();
+  }
+
   function collect() {
     const answers = {};
     document.querySelectorAll('.assess').forEach(box => {
@@ -2107,7 +2588,8 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
         effortText: box.querySelector(`input[name="effort-text-${id}"]`)?.value || '',
         crono: box.querySelector(`input[name="crono-${id}"]:checked`)?.value || '',
         cronoText: box.querySelector(`input[name="crono-text-${id}"]`)?.value || '',
-        custo: box.querySelector(`textarea[name="custo-${id}"]`)?.value || ''
+        custo: box.querySelector(`textarea[name="custo-${id}"]`)?.value || '',
+        dificuldade: box.querySelector(`input[name="dificuldade-${id}"]:checked`)?.value || ''
       };
     });
     return answers;
@@ -2116,7 +2598,8 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
   function applyScope(box) {
     if (isCliente) return;
     const id = box.dataset.assess;
-    const scope = box.querySelector(`input[name="scope-${id}"]:checked`)?.value;
+    const scope = box.querySelector(`input[name="scope-${id}"]:checked`)?.value || 'nao';
+    box.dataset.scope = scope;
     const fields = box.querySelector('.impact-fields');
     if (fields) fields.hidden = scope !== 'nao';
     const effort = box.querySelector(`input[name="effort-${id}"]:checked`)?.value;
@@ -2125,11 +2608,239 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
     const cronoText = box.querySelector(`input[name="crono-text-${id}"]`);
     if (effortText) effortText.disabled = effort !== 'sim';
     if (cronoText) cronoText.disabled = crono !== 'sim';
+    updateDifficultyEstimate(box);
+  }
+
+  function readScope(box) {
+    if (!box) return 'nao';
+    if (box.dataset.scope === 'absorvido' || box.dataset.scope === 'nao') return box.dataset.scope;
+    const id = box.dataset.assess;
+    const checked = box.querySelector(`input[name="scope-${id}"]:checked`);
+    return checked?.value === 'absorvido' ? 'absorvido' : 'nao';
+  }
+
+  function updateProjectScopeBanner() {
+    let abs = 0;
+    let nao = 0;
+    document.querySelectorAll('.assess').forEach(box => {
+      if (readScope(box) === 'absorvido') abs += 1;
+      else nao += 1;
+    });
+    const absEl = document.getElementById('countAbsorvidos');
+    const naoEl = document.getElementById('countNaoAbsorvidos');
+    if (absEl) absEl.textContent = String(abs);
+    if (naoEl) naoEl.textContent = String(nao);
+  }
+
+  function setPanelFilter(wrap, filter) {
+    const next = filter === 'absorvido' ? 'absorvido' : 'nao';
+    wrap.dataset.activeFilter = next;
+    wrap.querySelectorAll('.scope-filter-btn').forEach(btn => {
+      btn.setAttribute('aria-pressed', String(btn.dataset.filter === next));
+    });
+    const title = wrap.querySelector('.scope-view-title');
+    if (title) {
+      title.dataset.active = next;
+      title.textContent = next === 'absorvido' ? 'Itens absorvidos' : 'Itens não absorvidos';
+    }
+    const absBody = wrap.querySelector('[data-scope-body="absorvido"]');
+    const naoBody = wrap.querySelector('[data-scope-body="nao"]');
+    if (absBody) absBody.hidden = next !== 'absorvido';
+    if (naoBody) naoBody.hidden = next !== 'nao';
+    updateNaoAbsorvidoSubtotals();
+  }
+
+  function ensurePanelAccordions(panel) {
+    let wrap = panel.querySelector(':scope > .scope-accordions');
+    if (wrap && Array.isArray(wrap._frameList) && wrap._frameList.length) {
+      // Migra shell antigo (details) para filtros, se ainda existir
+      if (!wrap.querySelector('.scope-filters')) {
+        const frames = wrap._frameList;
+        const absBody = wrap.querySelector('[data-scope-body="absorvido"]');
+        const naoBody = wrap.querySelector('[data-scope-body="nao"]');
+        const absNodes = absBody ? Array.from(absBody.childNodes) : [];
+        const naoNodes = naoBody ? Array.from(naoBody.childNodes) : [];
+        wrap.innerHTML =
+          `<div class="scope-filters" role="group" aria-label="Filtrar por status">` +
+            `<button type="button" class="scope-filter-btn" data-filter="absorvido" aria-pressed="false">` +
+              `<span class="sf-label">Absorvidos <span class="sf-count" data-acc-count="absorvido">0</span></span>` +
+              `<span class="sf-hint">Clique para ver os itens</span>` +
+            `</button>` +
+            `<button type="button" class="scope-filter-btn" data-filter="nao" aria-pressed="true">` +
+              `<span class="sf-label">Não absorvidos <span class="sf-count" data-acc-count="nao">0</span></span>` +
+              `<span class="sf-hint">Clique para ver os itens</span>` +
+            `</button>` +
+          `</div>` +
+          `<h3 class="scope-view-title" data-active="nao">Itens não absorvidos</h3>` +
+          `<div class="scope-acc-body" data-scope-body="absorvido" hidden></div>` +
+          `<div class="scope-acc-body" data-scope-body="nao"></div>`;
+        const newAbs = wrap.querySelector('[data-scope-body="absorvido"]');
+        const newNao = wrap.querySelector('[data-scope-body="nao"]');
+        absNodes.forEach(n => newAbs.appendChild(n));
+        naoNodes.forEach(n => newNao.appendChild(n));
+        wrap._frameList = frames;
+        wrap.querySelectorAll('.scope-filter-btn').forEach(btn => {
+          btn.addEventListener('click', () => setPanelFilter(wrap, btn.dataset.filter));
+        });
+        setPanelFilter(wrap, wrap.dataset.activeFilter || 'nao');
+      }
+      return wrap;
+    }
+
+    const frames = Array.from(panel.querySelectorAll('.frame-card'));
+    frames.forEach((frame, i) => {
+      const key = `${panel.id}-${i}`;
+      frame.dataset.frameKey = key;
+      frame.querySelectorAll('.comment-card').forEach(card => {
+        card.dataset.frameKey = key;
+      });
+    });
+
+    wrap = document.createElement('div');
+    wrap.className = 'scope-accordions';
+    wrap.innerHTML =
+      `<div class="scope-filters" role="group" aria-label="Filtrar por status">` +
+        `<button type="button" class="scope-filter-btn" data-filter="absorvido" aria-pressed="false">` +
+          `<span class="sf-label">Absorvidos <span class="sf-count" data-acc-count="absorvido">0</span></span>` +
+          `<span class="sf-hint">Clique para ver os itens</span>` +
+        `</button>` +
+        `<button type="button" class="scope-filter-btn" data-filter="nao" aria-pressed="true">` +
+          `<span class="sf-label">Não absorvidos <span class="sf-count" data-acc-count="nao">0</span></span>` +
+          `<span class="sf-hint">Clique para ver os itens</span>` +
+        `</button>` +
+      `</div>` +
+      `<h3 class="scope-view-title" data-active="nao">Itens não absorvidos</h3>` +
+      `<div class="scope-acc-body" data-scope-body="absorvido" hidden></div>` +
+      `<div class="scope-acc-body" data-scope-body="nao"></div>`;
+
+    while (panel.firstChild) panel.removeChild(panel.firstChild);
+    panel.appendChild(wrap);
+    wrap._frameList = frames;
+    wrap.querySelectorAll('.scope-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => setPanelFilter(wrap, btn.dataset.filter));
+    });
+    setPanelFilter(wrap, 'nao');
+    return wrap;
+  }
+
+  function cloneFrameShell(frame) {
+    const shell = document.createElement('div');
+    shell.className = 'frame-card';
+    shell.dataset.cloneOf = frame.dataset.frameKey || '';
+    const head = frame.querySelector('.frame-head');
+    const shot = frame.querySelector('.frame-shot');
+    if (head) shell.appendChild(head.cloneNode(true));
+    if (shot) {
+      const shotClone = shot.cloneNode(true);
+      shell.appendChild(shotClone);
+      shotClone.addEventListener('click', () => {
+        if (typeof openLightbox === 'function') {
+          openLightbox(shotClone.dataset.full, shotClone.dataset.caption);
+        }
+      });
+    }
+    const comments = document.createElement('div');
+    comments.className = 'comments-under-frame';
+    shell.appendChild(comments);
+    return { shell, comments };
+  }
+
+  function reflowScopeAccordions() {
+    ['panel-bruno', 'panel-nathalia'].forEach(panelId => {
+      const panel = document.getElementById(panelId);
+      if (!panel) return;
+      const wrap = ensurePanelAccordions(panel);
+      const frames = wrap._frameList || [];
+      const absBody = wrap.querySelector('[data-scope-body="absorvido"]');
+      const naoBody = wrap.querySelector('[data-scope-body="nao"]');
+      if (!absBody || !naoBody) return;
+
+      // Cards vivem nos frames originais (mesmo se detachados) — não buscar só no panel
+      const allCards = [];
+      frames.forEach(frame => {
+        frame.querySelectorAll('.comment-card').forEach(card => allCards.push(card));
+      });
+      panel.querySelectorAll('.comment-card').forEach(card => {
+        if (!allCards.includes(card)) allCards.push(card);
+      });
+
+      const staging = document.createDocumentFragment();
+      allCards.forEach(card => staging.appendChild(card));
+
+      while (absBody.firstChild) absBody.removeChild(absBody.firstChild);
+      while (naoBody.firstChild) naoBody.removeChild(naoBody.firstChild);
+      frames.forEach(frame => {
+        if (frame.parentNode) frame.parentNode.removeChild(frame);
+      });
+
+      frames.forEach(frame => {
+        let commentsWrap = frame.querySelector('.comments-under-frame');
+        if (!commentsWrap) {
+          commentsWrap = document.createElement('div');
+          commentsWrap.className = 'comments-under-frame';
+          frame.appendChild(commentsWrap);
+        }
+        allCards
+          .filter(card => card.dataset.frameKey === frame.dataset.frameKey)
+          .forEach(card => commentsWrap.appendChild(card));
+      });
+
+      let absCount = 0;
+      let naoCount = 0;
+
+      frames.forEach(frame => {
+        const cards = Array.from(frame.querySelectorAll('.comment-card'));
+        if (!cards.length) return;
+        const groups = { absorvido: [], nao: [] };
+        cards.forEach(card => {
+          const scope = readScope(card.querySelector('.assess'));
+          groups[scope === 'absorvido' ? 'absorvido' : 'nao'].push(card);
+        });
+
+        const hasAbs = groups.absorvido.length > 0;
+        const hasNao = groups.nao.length > 0;
+
+        if (hasAbs && !hasNao) {
+          absCount += groups.absorvido.length;
+          absBody.appendChild(frame);
+          return;
+        }
+        if (hasNao && !hasAbs) {
+          naoCount += groups.nao.length;
+          naoBody.appendChild(frame);
+          return;
+        }
+
+        if (hasAbs) {
+          absCount += groups.absorvido.length;
+          const { shell, comments } = cloneFrameShell(frame);
+          groups.absorvido.forEach(card => comments.appendChild(card));
+          absBody.appendChild(shell);
+        }
+        if (hasNao) {
+          naoCount += groups.nao.length;
+          const { shell, comments } = cloneFrameShell(frame);
+          groups.nao.forEach(card => comments.appendChild(card));
+          naoBody.appendChild(shell);
+        }
+      });
+
+      const absCountEl = wrap.querySelector('[data-acc-count="absorvido"]');
+      const naoCountEl = wrap.querySelector('[data-acc-count="nao"]');
+      if (absCountEl) absCountEl.textContent = String(absCount);
+      if (naoCountEl) naoCountEl.textContent = String(naoCount);
+      setPanelFilter(wrap, wrap.dataset.activeFilter || 'nao');
+      wrap.querySelectorAll('.assess').forEach(updateDifficultyEstimate);
+    });
+
+    updateProjectScopeBanner();
+    updateNaoAbsorvidoSubtotals();
   }
 
   function normalizeAnswer(v) {
     const effortMap = { aumenta: 'sim', ok: 'nao' };
     const cronoMap = { impacta: 'sim' };
+    const diff = String(v.dificuldade || '').trim();
     return {
       scope: v.scope || '',
       effort: effortMap[v.effort] || v.effort || '',
@@ -2137,7 +2848,8 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
       crono: cronoMap[v.crono] || v.crono || '',
       cronoText: (v.cronoText || '').trim(),
       custo: (v.custo || '').trim(),
-      consideracoes: (v.consideracoes || '').trim()
+      consideracoes: (v.consideracoes || '').trim(),
+      dificuldade: /^([1-9]|10)$/.test(diff) ? diff : ''
     };
   }
 
@@ -2238,8 +2950,10 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
 
     if (v.scope === 'absorvido') {
       tags.push('<span class="tag tag-ok">Absorvido</span>');
+      box.dataset.scope = 'absorvido';
     } else if (v.scope === 'nao') {
       tags.push('<span class="tag tag-warn">Não absorvido</span>');
+      box.dataset.scope = 'nao';
       if (v.effort === 'sim') {
         rows.push({ label: 'Esforço', value: v.effortText || 'Sim' });
       }
@@ -2250,10 +2964,20 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
         rows.push({ label: 'Motivos', value: v.custo });
       }
     } else {
+      box.dataset.scope = 'nao';
       summary.innerHTML = '<p class="summary-empty">Avaliação ainda não registrada.</p>';
       // Texto aberto do cliente: independente da avaliação do /time
       ensureClientNotes(box, v.consideracoes);
       return;
+    }
+
+    if (v.dificuldade) {
+      tags.push(`<span class="tag tag-ok">Dificuldade ${v.dificuldade}/10</span>`);
+      const cost = itemCostFromDifficulty(v.dificuldade);
+      if (v.scope === 'nao' && cost) {
+        rows.push({ label: 'Horas', value: `${cost.hours}h` });
+        rows.push({ label: 'Valor', value: formatBRL(cost.value) });
+      }
     }
 
     let html = `<div class="summary-tags">${tags.join('')}</div>`;
@@ -2270,6 +2994,7 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
   }
 
   function applyAnswers(answers) {
+    answersCache = answers && typeof answers === 'object' ? answers : {};
     document.querySelectorAll('.assess').forEach(box => {
       const id = box.dataset.assess;
       const v = (answers && answers[id]) || {};
@@ -2304,9 +3029,27 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
       if (et) et.value = v.effortText || '';
       if (ct) ct.value = v.cronoText || '';
       if (cu) cu.value = v.custo || '';
+      ensureDifficultyField(box);
+      const diffVal = String(v.dificuldade || '');
+      box.dataset.dificuldade = diffVal;
+      box.querySelectorAll(`input[name="dificuldade-${id}"]`).forEach(el => {
+        el.checked = diffVal === el.value;
+      });
       applyScope(box);
       renderTeamConsideracoes(box, v.consideracoes || '');
     });
+    reflowScopeAccordions();
+    document.querySelectorAll('.assess').forEach(box => {
+      const id = box.dataset.assess;
+      const diffVal = getDifficulty(box);
+      if (diffVal) {
+        box.dataset.dificuldade = diffVal;
+        const radio = box.querySelector(`input[name="dificuldade-${id}"][value="${diffVal}"]`);
+        if (radio) radio.checked = true;
+      }
+      updateDifficultyEstimate(box);
+    });
+    updateNaoAbsorvidoSubtotals();
   }
 
   let saveTimer = null;
@@ -2315,6 +3058,7 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
   async function persist(showStatus = true) {
     if (!equipeReady) return;
     const answers = collect();
+    answersCache = answers;
     localStorage.setItem(KEY, JSON.stringify(answers));
     const cardPill = lastEditedAssess ? ensureAssessSavePill(lastEditedAssess) : null;
     if (showStatus) {
@@ -2336,6 +3080,7 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
         return;
       }
       if (!res.ok) throw new Error('falha');
+      updateNaoAbsorvidoSubtotals();
       if (showStatus) {
         setSavePill(statusEl, 'saved');
         setSavePill(cardPill, 'saved');
@@ -2437,8 +3182,8 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
     await load();
   }
 
-  // Tabs
-  const tabs = document.querySelectorAll('.tab');
+  // Tabs / autores no card verde
+  const tabs = document.querySelectorAll('.banner-author, .tab');
   const panels = {
     bruno: document.getElementById('panel-bruno'),
     nathalia: document.getElementById('panel-nathalia')
@@ -2461,7 +3206,23 @@ body.is-equipe.is-unlocked .login-gate { display: none !important; }
 
   if (isEquipe) {
     document.querySelectorAll('.assess').forEach(box => {
-      box.addEventListener('change', () => { applyScope(box); scheduleSave(box); });
+      ensureDifficultyField(box);
+      box.addEventListener('change', (e) => {
+        applyScope(box);
+        const name = e.target && e.target.name;
+        if (name && String(name).startsWith('dificuldade-')) {
+          box.dataset.dificuldade = e.target.value || '';
+          if (!answersCache[box.dataset.assess]) answersCache[box.dataset.assess] = {};
+          answersCache[box.dataset.assess].dificuldade = e.target.value || '';
+          updateDifficultyEstimate(box);
+          updateNaoAbsorvidoSubtotals();
+        }
+        if (name && String(name).startsWith('scope-')) {
+          reflowScopeAccordions();
+          updateNaoAbsorvidoSubtotals();
+        }
+        scheduleSave(box);
+      });
       box.addEventListener('input', () => scheduleSave(box));
     });
 

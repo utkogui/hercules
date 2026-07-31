@@ -1,4 +1,347 @@
 {
-  "updatedAt": null,
-  "answers": {}
+  "updatedAt": "2026-07-30T19:24:30.432Z",
+  "answers": {
+    "1834974955": {
+      "scope": "nao",
+      "effort": "nao",
+      "effortText": "",
+      "crono": "nao",
+      "cronoText": "",
+      "custo": "Esse campo terá como retorno de busca apenas os Projetos de Auditoria. Na parte superior (cabeçalho) existe um campo que irá fazer a busca geral em todo módulo.",
+      "dificuldade": "1"
+    },
+    "1834977781": {
+      "scope": "nao",
+      "effort": "sim",
+      "effortText": "",
+      "crono": "nao",
+      "cronoText": "",
+      "custo": "Recomendamos não implementar esse filtro na barra de status, pois sua usabilidade depende da quantidade de projetos em cada status. Quando houver poucos itens, a área de interação não ficará explícita, comprometendo a descoberta da funcionalidade e podendo induzir o usuário a interpretar incorretamente que não existem projetos naquele status.",
+      "dificuldade": "1"
+    },
+    "1834987080": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1834990690": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1835004625": {
+      "scope": "absorvido",
+      "effort": "nao",
+      "effortText": "",
+      "crono": "nao",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1835013269": {
+      "scope": "nao",
+      "effort": "nao",
+      "effortText": "",
+      "crono": "nao",
+      "cronoText": "",
+      "custo": "Por favor, atualizar esse ajuste de regra de negócio no miro.",
+      "dificuldade": "1"
+    },
+    "1835017495": {
+      "scope": "nao",
+      "effort": "nao",
+      "effortText": "",
+      "crono": "nao",
+      "cronoText": "",
+      "custo": "Por favor, atualizar esse ajuste de regra de negócio no miro.",
+      "dificuldade": "1"
+    },
+    "1835106842": {
+      "scope": "nao",
+      "effort": "nao",
+      "effortText": "",
+      "crono": "nao",
+      "cronoText": "",
+      "custo": "Nessa modal no campo de \"Riscos a testar\" será possível selecionar apenas o riscos cadastrados previamente no sistema",
+      "dificuldade": "1"
+    },
+    "1835117485": {
+      "scope": "nao",
+      "effort": "sim",
+      "effortText": "Ajuste de lógica de relacionamento no back-end.",
+      "crono": "nao",
+      "cronoText": "",
+      "custo": "Por favor, atualizar esse ajuste de regra de negócio no miro.",
+      "dificuldade": "5"
+    },
+    "1835118067": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1835126012": {
+      "scope": "nao",
+      "effort": "sim",
+      "effortText": "Ajuste de interface no card",
+      "crono": "nao",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": "1"
+    },
+    "1835137881": {
+      "scope": "nao",
+      "effort": "nao",
+      "effortText": "",
+      "crono": "nao",
+      "cronoText": "",
+      "custo": "Por favor, atualizar esse ajuste de regra de negócio no miro.",
+      "dificuldade": "1"
+    },
+    "1835154123": {
+      "scope": "nao",
+      "effort": "nao",
+      "effortText": "",
+      "crono": "nao",
+      "cronoText": "",
+      "custo": "Ponto de atenção – Regra de negócio: Qual é o status padrão de um projeto no momento da criação? Antes de ser avaliado, não avaliado ou justificado o risco se se encontra em um estado neutro. Como esse cenário será representado no sistema? ",
+      "dificuldade": "1"
+    },
+    "1835187840": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1835523033": {
+      "scope": "nao",
+      "effort": "sim",
+      "effortText": "",
+      "crono": "sim",
+      "cronoText": "",
+      "custo": "Ajuste lógico de relação entre Plano de Ação <> Pessoas Participante(s) no back-end.",
+      "dificuldade": ""
+    },
+    "1835546963": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1835557957": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1835565599": {
+      "scope": "nao",
+      "effort": "sim",
+      "effortText": "",
+      "crono": "sim",
+      "cronoText": "",
+      "custo": "Ajuste lógico de relação entre Plano de Ação <> Pessoas Participante(s) no back-end.",
+      "dificuldade": ""
+    },
+    "1835568615": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1835742485": {
+      "scope": "nao",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "Não está claro a observação.",
+      "dificuldade": ""
+    },
+    "1835743238": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1835746574": {
+      "scope": "nao",
+      "effort": "nao",
+      "effortText": "",
+      "crono": "nao",
+      "cronoText": "",
+      "custo": "Aqui os status serão apenas vinculados aos cards de Plano de Ação, sendo eles \"Planejamento\", \"Em aprovação\" e \"Aprovado\".",
+      "dificuldade": ""
+    },
+    "1835747369": {
+      "scope": "nao",
+      "effort": "sim",
+      "effortText": "",
+      "crono": "nao",
+      "cronoText": "",
+      "custo": "Por favor, atualizar esse ajuste de regra de negócio no miro.",
+      "dificuldade": ""
+    },
+    "1835753416": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1835756605": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1835757330": {
+      "scope": "absorvido",
+      "effort": "nao",
+      "effortText": "",
+      "crono": "nao",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1835758489": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1841305741": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1841306615": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1841307402": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1841309656": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1841310209": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1841312603": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1841317579": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1841323200": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1841323751": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1841326368": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    },
+    "1842401170": {
+      "scope": "absorvido",
+      "effort": "",
+      "effortText": "",
+      "crono": "",
+      "cronoText": "",
+      "custo": "",
+      "dificuldade": ""
+    }
+  }
 }
